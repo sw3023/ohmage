@@ -54,6 +54,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import javax.mail.internet.*;
 import org.json.*;
+import org.apache.log4j.Logger;
 
 /**
  * This class is responsible for creating, reading, updating, and deleting
@@ -64,6 +65,9 @@ import org.json.*;
  */
 public class SurveyResponseQueries extends Query implements ISurveyResponseQueries {
 	
+	private static final Logger LOGGER = 
+		Logger.getLogger(SurveyResponseQueries.class);
+		
 	private static final String SQL_GET_CAMPAIGN_URN_FOR_SURVEY_ID =
 	    "SELECT urn " +
 	    "FROM campaign, survey_response " +
