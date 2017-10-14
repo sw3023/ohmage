@@ -216,7 +216,7 @@ public class TextPrompt extends Prompt {
 						"): " +
 						length);
 		}
-		else if(length > max) {
+		else if(length > 8*max) {
 			throw new DomainException(
 					"The value for prompt '" +
 						getId() +
