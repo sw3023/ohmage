@@ -231,6 +231,7 @@ public class SurveyUploadQuery extends AbstractUploadQuery implements ISurveyUpl
 							JSONArray ary = obj0.getJSONArray("responses");
 							for (int cc = 0; cc < ary.length(); cc++) {
 								obj = (JSONObject)(obj0.getJSONArray("responses").get(cc));
+								obj.put("value", MimeUtility.encodeText(obj.getString("value")));
 							}
 							ps.setString(9, obj0.toString());
 							}
