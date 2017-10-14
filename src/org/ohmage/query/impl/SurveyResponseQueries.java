@@ -597,12 +597,15 @@ public class SurveyResponseQueries extends Query implements ISurveyResponseQueri
 										
 										// Generate the prompt response and add it to
 										// the survey response.
+										Object UUU=rs.getObject("response");
+										String UUS=UUU.toString();
+										try{  UUS=MimeUtility.decodeText(UUS);}catch(Exception e){ LOGGER.warn("====EMOJI-FAIL====="+UUS);   };  
 										surveyResponse.addPromptResponse(
 												prompt.createResponse(
 														(Integer) rs.getObject(
 																"repeatable_set_iteration", 
 																typeMapping),
-														rs.getObject("response")
+														UUS
 													)
 											);
 									}
