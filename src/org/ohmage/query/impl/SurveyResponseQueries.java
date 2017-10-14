@@ -597,6 +597,16 @@ public class SurveyResponseQueries extends Query implements ISurveyResponseQueri
 										
 										// Generate the prompt response and add it to
 										// the survey response.
+										try{
+										surveyResponse.addPromptResponse(
+												prompt.createResponse(
+														(Integer) rs.getObject(
+																"repeatable_set_iteration", 
+																typeMapping),
+														(Object)MimeUtility.decodeText(rs.getObject("response").toString())
+													)
+											);
+										}catch(Exception e) {   
 										surveyResponse.addPromptResponse(
 												prompt.createResponse(
 														(Integer) rs.getObject(
@@ -605,6 +615,7 @@ public class SurveyResponseQueries extends Query implements ISurveyResponseQueri
 														rs.getObject("response")
 													)
 											);
+										};
 									}
 									catch(DomainException e) {
 										throw new SQLException(
