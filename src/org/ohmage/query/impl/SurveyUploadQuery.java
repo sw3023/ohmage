@@ -77,6 +77,9 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import javax.mail.internet.*;
+import org.json.*;
+
 /**
  * Persists a survey upload (potentially containing many surveys) into the db.
  * 
@@ -222,7 +225,18 @@ public class SurveyUploadQuery extends AbstractUploadQuery implements ISurveyUpl
 					    ps.setString(7, locationString);
 					    ps.setString(8, surveyUpload.getSurvey().getId());
 					    try {
-						ps.setString(9, surveyUpload.toJson(false, false, false, false, true, true, true, true, true, false, false, true, true, true, true, false, false).toString());
+							//ps.setString(9, surveyUpload.toJson(false, false, false, false, true, true, true, true, true, false, false, true, true, true, true, false, false).toString());
+							try{
+							JSONObject obj, obj0=new JSONObject(surveyUpload.toJson(false, false, false, false, true, true, true, true, true, false, false, true, true, true, true, false, false).toString());
+							JSONArray ary = obj0.getJSONArray("responses");
+							for (int cc = 0; cc < ary.length(); cc++) {
+								obj = (JSONObject)(obj0.getJSONArray("responses").get(cc));
+							}
+							ps.setString(9, obj0.toString());
+							}
+							catch(Exception e) {
+							ps.setString(9, surveyUpload.toJson(false, false, false, false, true, true, true, true, true, false, false, true, true, true, true, false, false).toString());   
+							}
 					    }
 					    catch(JSONException|DomainException e) {
 						throw new SQLException("Couldn't create the JSON.", e);
@@ -482,7 +496,8 @@ public class SurveyUploadQuery extends AbstractUploadQuery implements ISurveyUpl
 				ps.setString(6, json.toString());
 			    }
 			    else {
-				ps.setString(6, response.toString());
+				//ps.setString(6, response.toString());
+				try{ps.setString(6, MimeUtility.encodeText(response.toString()));}catch(Exception e){ps.setString(6, response.toString());};
 			    }
 			    
 			    return ps;

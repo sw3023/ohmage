@@ -52,6 +52,9 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import javax.mail.internet.*;
+import org.json.*;
+
 /**
  * This class is responsible for creating, reading, updating, and deleting
  * survey responses.
