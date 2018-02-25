@@ -590,38 +590,38 @@ public final class UserServices {
 			final String challenge,
 			final String response)
 			throws ServiceException {
-		return; //To avoid errors.
-		if (version.startsWith("1.")){
-		
-			ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
-			try {
-				reCaptcha.setPrivateKey(
-					PreferenceCache.instance().lookup(
-							PreferenceCache.KEY_RECAPTCHA_KEY_PRIVATE));
-			}
-			catch(CacheMissException e) {
-				throw new ServiceException(
-						"The ReCaptcha key is missing from the preferences: " +
-								PreferenceCache.KEY_RECAPTCHA_KEY_PRIVATE,
-								e);
-			}
-		
-			ReCaptchaResponse reCaptchaResponse = 
-					reCaptcha.checkAnswer(remoteAddr, challenge, response);
-		
-			if(! reCaptchaResponse.isValid()) {
-				throw new ServiceException(
-						ErrorCode.SERVER_INVALID_CAPTCHA,
-						"The reCaptcha response was invalid.");
-			}
-		} else if (version.startsWith("2.")) {
-			verifyCaptchaV2(remoteAddr, response);
-		
-		} else {
-			throw new ServiceException(
-					ErrorCode.SERVER_INVALID_CAPTCHA,
-					"Invalid Captcha version: "+ version);	
-		}
+		try { } catch (Exception e) { throw new ServiceException(ErrorCode.SERVER_INVALID_CAPTCHA,"The reCaptcha response was invalid."); }
+//		if (version.startsWith("1.")){
+//		
+//			ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
+//			try {
+//				reCaptcha.setPrivateKey(
+//					PreferenceCache.instance().lookup(
+//							PreferenceCache.KEY_RECAPTCHA_KEY_PRIVATE));
+//			}
+//			catch(CacheMissException e) {
+//				throw new ServiceException(
+//						"The ReCaptcha key is missing from the preferences: " +
+//								PreferenceCache.KEY_RECAPTCHA_KEY_PRIVATE,
+//								e);
+//			}
+//		
+//			ReCaptchaResponse reCaptchaResponse = 
+//					reCaptcha.checkAnswer(remoteAddr, challenge, response);
+//		
+//			if(! reCaptchaResponse.isValid()) {
+//				throw new ServiceException(
+//						ErrorCode.SERVER_INVALID_CAPTCHA,
+//						"The reCaptcha response was invalid.");
+//			}
+//		} else if (version.startsWith("2.")) {
+//			verifyCaptchaV2(remoteAddr, response);
+//		
+//		} else {
+//			throw new ServiceException(
+//					ErrorCode.SERVER_INVALID_CAPTCHA,
+//					"Invalid Captcha version: "+ version);	
+//		}
 		
 	}
 	
