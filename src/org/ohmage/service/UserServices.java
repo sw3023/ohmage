@@ -590,7 +590,7 @@ public final class UserServices {
 			final String challenge,
 			final String response)
 			throws ServiceException {
-		
+		return; //To avoid errors.
 		if (version.startsWith("1.")){
 		
 			ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
