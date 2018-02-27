@@ -165,62 +165,62 @@ public class UserRegistrationRequest extends Request {
 								InputKeys.EMAIL_ADDRESS);
 				}
 
-				// optional: will be used to indicate recapcha v2
-				t = getParameterValues(InputKeys.CAPTCHA_VERSION);
-				if(t.length > 1) {
-					throw new ValidationException(
-							ErrorCode.SERVER_INVALID_CAPTCHA,
-							"Multiple recaptcha version were given: " +
-								InputKeys.CAPTCHA_VERSION);
-				}
-				else if(t.length == 1) {
-					tCaptchaVersion = UserValidators.validateCaptchaVersion(t[0]);
+				////optional: will be used to indicate recapcha v2
+				// t = getParameterValues(InputKeys.CAPTCHA_VERSION);
+				// if(t.length > 1) {
+					// throw new ValidationException(
+							// ErrorCode.SERVER_INVALID_CAPTCHA,
+							// "Multiple recaptcha version were given: " +
+								// InputKeys.CAPTCHA_VERSION);
+				// }
+				// else if(t.length == 1) {
+					// tCaptchaVersion = UserValidators.validateCaptchaVersion(t[0]);
 					
-					if (tCaptchaVersion == null)
-						throw new ValidationException(
-								ErrorCode.SERVER_INVALID_CAPTCHA,
-								"Invalid recaptcha version number (expect 1.0 or 2.0): " +
-									InputKeys.CAPTCHA_VERSION);	
-				} else {
-					tCaptchaVersion = "1.0";
-				}
+					// if (tCaptchaVersion == null)
+						// throw new ValidationException(
+								// ErrorCode.SERVER_INVALID_CAPTCHA,
+								// "Invalid recaptcha version number (expect 1.0 or 2.0): " +
+									// InputKeys.CAPTCHA_VERSION);	
+				// } else {
+					// tCaptchaVersion = "1.0";
+				// }
 								
 				
-				t = getParameterValues(InputKeys.CAPTCHA_CHALLENGE);
-				if(t.length > 1) {
-					throw new ValidationException(
-							ErrorCode.SERVER_INVALID_CAPTCHA,
-							"Multiple captcha challenge key were given: " +
-								InputKeys.CAPTCHA_CHALLENGE);
-				}
-				else if(t.length == 1) {
-					tCaptchaChallenge = t[0];
-				}
-				else { // The challenge is needed for version 1
-					if (tCaptchaVersion.startsWith("1.")){
-						throw new ValidationException(
-								ErrorCode.SERVER_INVALID_CAPTCHA,
-								"The captcha challenge key was missing: " +
-										InputKeys.CAPTCHA_CHALLENGE);
-					}
-				}	
+				// t = getParameterValues(InputKeys.CAPTCHA_CHALLENGE);
+				// if(t.length > 1) {
+					// throw new ValidationException(
+							// ErrorCode.SERVER_INVALID_CAPTCHA,
+							// "Multiple captcha challenge key were given: " +
+								// InputKeys.CAPTCHA_CHALLENGE);
+				// }
+				// else if(t.length == 1) {
+					// tCaptchaChallenge = t[0];
+				// }
+				// else { // The challenge is needed for version 1
+					// if (tCaptchaVersion.startsWith("1.")){
+						// throw new ValidationException(
+								// ErrorCode.SERVER_INVALID_CAPTCHA,
+								// "The captcha challenge key was missing: " +
+										// InputKeys.CAPTCHA_CHALLENGE);
+					// }
+				// }	
 				
-				t = getParameterValues(InputKeys.CAPTCHA_RESPONSE);
-				if(t.length > 1) {
-					throw new ValidationException(
-							ErrorCode.SERVER_INVALID_CAPTCHA,
-							"Multiple captcha response key were given: " +
-								InputKeys.CAPTCHA_RESPONSE);
-				}
-				else if(t.length == 1) {
-					tCaptchaResponse = t[0];
-				}
-				else {
-					throw new ValidationException(
-							ErrorCode.SERVER_INVALID_CAPTCHA,
-							"The captcha response key was missing: " +
-								InputKeys.CAPTCHA_RESPONSE);
-				}
+				// t = getParameterValues(InputKeys.CAPTCHA_RESPONSE);
+				// if(t.length > 1) {
+					// throw new ValidationException(
+							// ErrorCode.SERVER_INVALID_CAPTCHA,
+							// "Multiple captcha response key were given: " +
+								// InputKeys.CAPTCHA_RESPONSE);
+				// }
+				// else if(t.length == 1) {
+					// tCaptchaResponse = t[0];
+				// }
+				// else {
+					// throw new ValidationException(
+							// ErrorCode.SERVER_INVALID_CAPTCHA,
+							// "The captcha response key was missing: " +
+								// InputKeys.CAPTCHA_RESPONSE);
+				// }
 				
 				tRemoteAddr = httpRequest.getRemoteAddr();
 			}
