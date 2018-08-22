@@ -2095,7 +2095,7 @@ public final class UserServices {
 			// set up properties
 			MailUtils.setMailMessageTo(message1, "support@mobilizingcs.org");
 			MailUtils.setMailMessageFrom(message1, PreferenceCache.KEY_MAIL_PASSWORD_RECOVERY_SENDER);
-			MailUtils.setMailMessageSubject(message1, ">>COPY: FOR USER " + username + " ONLY." + PreferenceCache.KEY_MAIL_PASSWORD_RECOVERY_SUBJECT);	
+			MailUtils.setMailMessageSubject(message1, PreferenceCache.KEY_MAIL_PASSWORD_RECOVERY_SUBJECT);	
 
 			try {
 				message1.setContent( ">>COPY: FOR USER " + username + " ONLY." +
