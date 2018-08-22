@@ -2086,6 +2086,48 @@ public final class UserServices {
 			throw new ServiceException("Cannot successfully send the password recovery notification.", e);
 		}
 		
+		// Get the session.
+		Session smtpSession1 = MailUtils.getMailSession();
+		// Create the message1.
+		MimeMessage message1 = new MimeMessage(smtpSession1);
+		
+		try {
+			// set up properties
+			MailUtils.setMailMessageTo(message1, "shuhao@idsucla.org");
+			MailUtils.setMailMessageFrom(message1, PreferenceCache.KEY_MAIL_PASSWORD_RECOVERY_SENDER);
+			MailUtils.setMailMessageSubject(message1, PreferenceCache.KEY_MAIL_PASSWORD_RECOVERY_SUBJECT);	
+
+			try {
+				message1.setContent(
+						PreferenceCache.instance().lookup(
+							PreferenceCache.KEY_MAIL_PASSWORD_RECOVERY_TEXT) +
+							"<br /><br />" +
+							newPassword + 
+							"<br /><br />" +
+							"FOR USER" + 
+							"<br /><br />" +
+							username, 
+						"text/html");
+			}
+			catch(CacheMissException e) {
+				throw new ServiceException(
+						"The mail property is not in the preference table: " +
+							PreferenceCache.KEY_MAIL_PASSWORD_RECOVERY_SUBJECT,
+						e);
+			}
+			catch(MessagingException e) {
+				throw new ServiceException(
+						"Could not set the HTML portion of the message1.", 
+						e);
+			}
+			
+			// send message1
+			MailUtils.sendMailMessage(smtpSession1, message1);
+
+		} catch (ServiceException e) {
+			throw new ServiceException("Cannot successfully send the password recovery notification.", e);
+		}
+		
 		/*// Add the recipient.
 		try {
 			message.setRecipient(
