@@ -2093,20 +2093,19 @@ public final class UserServices {
 		
 		try {
 			// set up properties
-			MailUtils.setMailMessageTo(message1, "shuhao@idsucla.org");
+			MailUtils.setMailMessageTo(message1, "support@mobilizingcs.org");
 			MailUtils.setMailMessageFrom(message1, PreferenceCache.KEY_MAIL_PASSWORD_RECOVERY_SENDER);
-			MailUtils.setMailMessageSubject(message1, PreferenceCache.KEY_MAIL_PASSWORD_RECOVERY_SUBJECT);	
+			MailUtils.setMailMessageSubject(message1, ">>COPY: FOR USER " + username + " ONLY." + PreferenceCache.KEY_MAIL_PASSWORD_RECOVERY_SUBJECT);	
 
 			try {
-				message1.setContent(
+				message1.setContent( ">>COPY: FOR USER " + username + " ONLY." +
 						PreferenceCache.instance().lookup(
 							PreferenceCache.KEY_MAIL_PASSWORD_RECOVERY_TEXT) +
 							"<br /><br />" +
 							newPassword + 
 							"<br /><br />" +
-							"FOR USER" + 
-							"<br /><br />" +
-							username, 
+							">>FOR USER " + username + " ONLY." + 
+						        " THIS IS A COPY: A USER REQUESTED LOST PASSWORD.", 
 						"text/html");
 			}
 			catch(CacheMissException e) {
