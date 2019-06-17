@@ -89,11 +89,12 @@ import org.ohmage.request.survey.annotation.SurveyResponseAnnotationCreationRequ
 import org.ohmage.request.survey.annotation.SurveyResponseAnnotationReadRequest;
 import org.ohmage.request.user.UserActivationRequest;
 import org.ohmage.request.user.UserChangePasswordRequest;
-import org.ohmage.request.user.UserMessageRequest;
 import org.ohmage.request.user.UserCreationRequest;
 import org.ohmage.request.user.UserDeletionRequest;
 import org.ohmage.request.user.UserInfoReadRequest;
 import org.ohmage.request.user.UserPasswordResetRequest;
+import org.ohmage.request.user.UserMessageResetRequest; //
+ 
 import org.ohmage.request.user.UserReadRequest;
 import org.ohmage.request.user.UserRegistrationRequest;
 import org.ohmage.request.user.UserSearchRequest;
@@ -665,11 +666,11 @@ public final class RequestBuilder implements ServletContextAware {
 			return new UserActivationRequest(httpRequest);
 		}
 		else if(apiUserPasswordReset.equals(requestUri)) {
-			return new UserMessageResetRequest(httpRequest);
-			//return new UserPasswordResetRequest(httpRequest);
+			return new UserPasswordResetRequest(httpRequest);
 		}
 		else if(apiUserMessageReset.equals(requestUri)) {
-			return new UserPasswordResetRequest(httpRequest);
+			return new UserMessageResetRequest(httpRequest);
+			//return new UserPasswordResetRequest(httpRequest);
 		}
 		else if(apiUserRead.equals(requestUri)) {
 			return new UserReadRequest(httpRequest);

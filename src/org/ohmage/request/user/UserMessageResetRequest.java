@@ -23,6 +23,10 @@ public class UserMessageResetRequest extends Request {
 	private final String username;
 	private final String emailAddress;
 	
+	private final boolean validSession;
+	
+	private final String Message;
+	
 	/**
 	 * Creates a password reset request.
 	 * 
@@ -43,6 +47,7 @@ public class UserMessageResetRequest extends Request {
 			String[] t;
 			LOGGER.info("Creating a new password reset request.");
 			
+			//====Validation USERNAME
 			try {
 				t = getParameterValues(InputKeys.USERNAME);
 				if(t.length > 1) {
@@ -68,28 +73,29 @@ public class UserMessageResetRequest extends Request {
 					}
 				}
 				
-				t = getParameterValues(InputKeys.EMAIL_ADDRESS);
+				//====Validation MESSAGE
+				t = getParameterValues(InputKeys.MESSAGE);
 				if(t.length > 1) {
 					throw new ValidationException(
-							ErrorCode.USER_INVALID_EMAIL_ADDRESS,
-							"Multiple email addresses were given: " +
-								InputKeys.EMAIL_ADDRESS);
+							ErrorCode.USER_INVALID_MESSAGE,
+							"Multiple message were given: " +
+								InputKeys.MESSAGE);
 				}
 				else if(t.length == 0) {
 					throw new ValidationException(
-							ErrorCode.USER_INVALID_EMAIL_ADDRESS,
-							"The email address is missing: " +
-								InputKeys.EMAIL_ADDRESS);
+							ErrorCode.USER_INVALID_MESSAGE,
+							"The message is missing: " +
+								InputKeys.MESSAGE);
 				}
 				else {
-					tEmailAddress = UserValidators.validateEmailAddress(t[0]);
-					
-					if(tEmailAddress == null) {
-						throw new ValidationException(
-								ErrorCode.USER_INVALID_EMAIL_ADDRESS,
-								"The email address is missing: " +
-									InputKeys.EMAIL_ADDRESS);
-					}
+					//tEmailAddress = UserValidators.validateEmailAddress(t[0]);
+					//
+					//if(tEmailAddress == null) {
+					//	throw new ValidationException(
+					//			ErrorCode.USER_INVALID_MESSAGE,
+					//			"The email address is missing: " +
+					//				InputKeys.MESSAGE);
+					//}
 				}
 			}
 			catch(ValidationException e) {
