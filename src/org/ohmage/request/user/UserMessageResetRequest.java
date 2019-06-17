@@ -16,9 +16,9 @@ import org.ohmage.request.Request;
 import org.ohmage.service.UserServices;
 import org.ohmage.validator.UserValidators;
 
-public class UserMessgaeResetRequest extends Request {
+public class UserMessageResetRequest extends Request {
 	private static final Logger LOGGER = 
-			Logger.getLogger(UserMessgaeResetRequest.class);
+			Logger.getLogger(UserMessageResetRequest.class);
 	
 	private final String username;
 	private final String emailAddress;
@@ -33,7 +33,7 @@ public class UserMessgaeResetRequest extends Request {
 	 * 
 	 * @throws IOException There was an error reading from the request.
 	 */
-	public UserMessgaeResetRequest(final HttpServletRequest httpRequest) throws IOException, InvalidRequestException {
+	public UserMessageResetRequest(final HttpServletRequest httpRequest) throws IOException, InvalidRequestException {
 		super(httpRequest, null);
 		
 		String tUsername = null;
