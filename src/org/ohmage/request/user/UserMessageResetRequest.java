@@ -73,28 +73,28 @@ public class UserMessageResetRequest extends Request {
 					}
 				}
 				
-				//====Validation MESSAGE
-				t = getParameterValues(InputKeys.MESSAGE);
+				//====Validation EMAIL_ADDRESS
+				t = getParameterValues(InputKeys.EMAIL_ADDRESS);
 				if(t.length > 1) {
 					throw new ValidationException(
-							ErrorCode.USER_INVALID_MESSAGE,
-							"Multiple message were given: " +
-								InputKeys.MESSAGE);
+							ErrorCode.USER_INVALID_EMAIL_ADDRESS,
+							"Multiple email addresses were given: " +
+								InputKeys.EMAIL_ADDRESS);
 				}
 				else if(t.length == 0) {
 					throw new ValidationException(
-							ErrorCode.USER_INVALID_MESSAGE,
-							"The message is missing: " +
-								InputKeys.MESSAGE);
+							ErrorCode.USER_INVALID_EMAIL_ADDRESS,
+							"The email address is missing: " +
+								InputKeys.EMAIL_ADDRESS);
 				}
 				else {
 					tEmailAddress = UserValidators.validateEmailAddress(t[0]);
 					
 					if(tEmailAddress == null) {
 						throw new ValidationException(
-								ErrorCode.USER_INVALID_MESSAGE,
+								ErrorCode.USER_INVALID_EMAIL_ADDRESS,
 								"The email address is missing: " +
-									InputKeys.MESSAGE);
+									InputKeys.EMAIL_ADDRESS);
 					}
 				}
 			}
