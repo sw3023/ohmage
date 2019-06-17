@@ -23,7 +23,7 @@ public class UserMessageResetRequest extends Request {
 	private final String username;
 	private final String emailAddress;
 	
-	private final boolean validSession;
+	//private final boolean validSession;
 	
 	private final String Message;
 	
