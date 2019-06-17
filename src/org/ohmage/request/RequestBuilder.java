@@ -89,6 +89,7 @@ import org.ohmage.request.survey.annotation.SurveyResponseAnnotationCreationRequ
 import org.ohmage.request.survey.annotation.SurveyResponseAnnotationReadRequest;
 import org.ohmage.request.user.UserActivationRequest;
 import org.ohmage.request.user.UserChangePasswordRequest;
+//import org.ohmage.request.user.UserMessageRequest;
 import org.ohmage.request.user.UserCreationRequest;
 import org.ohmage.request.user.UserDeletionRequest;
 import org.ohmage.request.user.UserInfoReadRequest;
@@ -219,6 +220,7 @@ public final class RequestBuilder implements ServletContextAware {
 	private String apiUserRegister;
 	private String apiUserActivate;
 	private String apiUserPasswordReset;
+	private String apiUserMessageReset;
 	private String apiUserRead;
 	private String apiUserInfoRead;
 	private String apiUserStatsRead;
@@ -381,6 +383,7 @@ public final class RequestBuilder implements ServletContextAware {
 		apiUserRegister = apiRoot + "/user/register";
 		apiUserActivate = apiRoot + "/user/activate";
 		apiUserPasswordReset = apiRoot + "/user/reset_password";
+		apiUserMessageReset = apiRoot + "/user/reset_message";
 		apiUserRead = apiRoot + "/user/read";
 		apiUserInfoRead = apiRoot + "/user_info/read";
 		apiUserStatsRead = apiRoot + "/user_stats/read";
@@ -662,6 +665,10 @@ public final class RequestBuilder implements ServletContextAware {
 			return new UserActivationRequest(httpRequest);
 		}
 		else if(apiUserPasswordReset.equals(requestUri)) {
+			//return new UserMessageResetRequest(httpRequest);
+			return new UserPasswordResetRequest(httpRequest);
+		}
+		else if(apiUserMessageReset.equals(requestUri)) {
 			return new UserPasswordResetRequest(httpRequest);
 		}
 		else if(apiUserRead.equals(requestUri)) {
@@ -849,6 +856,7 @@ public final class RequestBuilder implements ServletContextAware {
 				apiUserRegister.equals(uri) ||
 				apiUserActivate.equals(uri) ||
 				apiUserPasswordReset.equals(uri) ||
+				apiUserMessageReset.equals(uri) ||
 				apiUserRead.equals(uri) ||
 				apiUserInfoRead.equals(uri) ||
 				apiUserStatsRead.equals(uri) ||
@@ -1393,6 +1401,15 @@ public final class RequestBuilder implements ServletContextAware {
 	 */
 	public String getApiUserPasswordReset() {
 		return apiUserPasswordReset;
+	}
+	
+	/**
+	 * Returns apiUserMessageReset.
+	 *
+	 * @return The apiUserMessageReset.
+	 */
+	public String getApiUserMessageReset() {
+		return apiUserMessageReset;
 	}
 
 	/**
