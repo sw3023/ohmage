@@ -88,14 +88,14 @@ public class UserMessageResetRequest extends Request {
 								InputKeys.MESSAGE);
 				}
 				else {
-					//tEmailAddress = UserValidators.validateEmailAddress(t[0]);
-					//
-					//if(tEmailAddress == null) {
-					//	throw new ValidationException(
-					//			ErrorCode.USER_INVALID_MESSAGE,
-					//			"The email address is missing: " +
-					//				InputKeys.MESSAGE);
-					//}
+					tEmailAddress = UserValidators.validateEmailAddress(t[0]);
+					
+					if(tEmailAddress == null) {
+						throw new ValidationException(
+								ErrorCode.USER_INVALID_MESSAGE,
+								"The email address is missing: " +
+									InputKeys.MESSAGE);
+					}
 				}
 			}
 			catch(ValidationException e) {
