@@ -5,7 +5,7 @@ MAINTAINER Steve Nolen <technolengy@gmail.com>
 RUN set -x \
     && export DEBIAN_FRONTEND=noninteractive \
     && apt-get update \
-    && apt-get install --no-install-recommends -y openjdk-7-jdk ant ant-optional netcat git\
+    && apt-get install --no-install-recommends -y openjdk-8-jdk ant ant-optional netcat git\
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /usr/local/tomcat/webapps/ROOT \
