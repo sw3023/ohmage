@@ -14,4 +14,5 @@ INSERT INTO preference(p_key, p_value) VALUES
     ('file_directory', '/opt/ohmage/userdata/files'),
     ('audit_log_location', '/opt/ohmage/logs/audits/'),
     ('fully_qualified_domain_name', 'localhost'),
+	('mail_host', 'mail'),
     ('ssl_enabled', 'false');
