@@ -251,7 +251,8 @@ public class DocumentReadRequest extends UserRequest {
 		
 		try {
 			LOGGER.info("Gathering the document information.");
-			result = 
+			List<Document> arrlist;
+			arrlist = 
 					UserDocumentServices.instance().getDocumentInformation(
 							getUser().getUsername(), 
 							personalDocuments, 
@@ -261,7 +262,7 @@ public class DocumentReadRequest extends UserRequest {
 							descriptionTokens,
 							startDate,
 							endDate);
-			
+			result = arrlist;
 			LOGGER.info("Found " + result.size() + " documents.");
 		}
 		catch(ServiceException e) {
