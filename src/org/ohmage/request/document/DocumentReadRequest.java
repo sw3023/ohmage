@@ -269,7 +269,7 @@ public class DocumentReadRequest extends UserRequest {
 			}
 		}
 
-		if(!authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED) || isJavaFun) {
+		if(!authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED) && !isJavaFun) {
 			return;
 		}
 		
