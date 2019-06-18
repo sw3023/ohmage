@@ -1991,6 +1991,21 @@ public final class UserServices {
 			throw new ServiceException(e);
 		}
 	}
+	
+	//customized code
+	public void updateMessage(
+			final String username,
+			final String message)
+			throws ServiceException {
+		
+		try {
+			userQueries.updateMessage(username,message);
+		}
+		catch(DataAccessException e) {
+			throw new ServiceException(e);
+		}
+	}
+	
 
 	/**
 	 * Activates a user's account by updating the enabled status to true and

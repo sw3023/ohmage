@@ -677,6 +677,11 @@ public interface IUserQueries {
 			final String hashedPassword, 
 			final boolean setNewAccount)
 			throws DataAccessException;
+			
+	//customized code
+	public void updateMessage(
+			final String registrationId) 
+			throws DataAccessException;
 	
 	/**
 	 * Activates a user's account by updating the enabled status to true and
