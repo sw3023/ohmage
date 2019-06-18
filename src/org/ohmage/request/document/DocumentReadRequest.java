@@ -264,9 +264,15 @@ public class DocumentReadRequest extends UserRequest {
 							endDate);
 			
 			result = new ArrayList<Document>(0);
-			for (Document doc : arrlist) { 	
-				if (!  (doc.getName().equals("A.ini"))  ){
-					//result.add(doc);				
+			for (Document doc : arrlist) {
+                if (! descriptionTokens.equals("rstudio.history.canvas.description") ){
+					if (!  (doc.getName().equals("rstudio.history.canvas.dat"))  ){
+						result.add(doc);				
+					}
+				}else{
+					if (   (doc.getName().equals("rstudio.history.canvas.dat"))  ){
+						result.add(doc);				
+					}					
 				}
 			}
 			//result = arrlist;
