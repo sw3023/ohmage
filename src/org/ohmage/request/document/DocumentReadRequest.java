@@ -139,8 +139,10 @@ public class DocumentReadRequest extends UserRequest {
 			try {
 				t = getParameterValues(InputKeys.CLIENT);
 				if(t.length > 1) {
-					throw new InvalidClientException(
-							"More than one client value was given.");
+					throw new ValidationException(
+						ErrorCode.DOCUMENT_INVALID_PERSONAL_DOCUMENTS_VALUE, 
+						"More than one client value was given: " +
+							InputKeys.CLIENT);
 				}
 				else if(t.length == 1) {
 					t[0] = 
