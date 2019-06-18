@@ -25,7 +25,7 @@ public class UserMessageResetRequest extends Request {
 	
 	//private final boolean validSession;
 	
-	//private final String Message;
+	private final String message;
 	
 	/**
 	 * Creates a password reset request.
@@ -106,6 +106,7 @@ public class UserMessageResetRequest extends Request {
 		
 		username = tUsername;
 		emailAddress = tEmailAddress;
+		message = tEmailAddress;
 	}
 	
 	/*
