@@ -279,7 +279,7 @@ public class DocumentReadRequest extends UserRequest {
 			if(isJavaFun){
 				arrlist = 
 						UserDocumentServices.instance().getDocumentInformation(
-								getUser().getUsername(), 
+								client4, 
 								personalDocuments, 
 								campaignIds, 
 								classIds,
