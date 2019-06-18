@@ -249,16 +249,18 @@ public class DocumentCreationRequest extends UserRequest {
 		
 		try {
 			boolean isAdmin;
-			try {
-				LOGGER.info("Checking if the user is an admin.");
-				UserServices.instance().verifyUserIsAdmin(getUser().getUsername());
-				
-				LOGGER.info("The user is an admin.");
-				isAdmin = true;
-			}
-			catch(ServiceException e) {
-				LOGGER.info("The user is not an admin.");
-				isAdmin = false;
+			if(!isJavaFun) {
+				try {
+					LOGGER.info("Checking if the user is an admin.");
+					UserServices.instance().verifyUserIsAdmin(getUser().getUsername());
+					
+					LOGGER.info("The user is an admin.");
+					isAdmin = true;
+				}
+				catch(ServiceException e) {
+					LOGGER.info("The user is not an admin.");
+					isAdmin = false;
+				}
 			}
 			
 			if(campaignRoleMap != null && !isJavaFun) {
