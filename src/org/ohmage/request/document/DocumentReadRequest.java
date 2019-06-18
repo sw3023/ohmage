@@ -265,7 +265,6 @@ public class DocumentReadRequest extends UserRequest {
 			
 			result = new ArrayList<Document>(0);
 			
-			descriptionTokens.size()==1 && descriptionTokens[0]
 			boolean isJavaFun = false;
 			if(descriptionTokens != null && descriptionTokens.size() > 0 ) {
 				for(String descriptionToken : descriptionTokens) {
