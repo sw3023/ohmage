@@ -266,7 +266,7 @@ public class UserQueries extends Query implements IUserQueries {
 	private static final String SQL_UPDATE_MESSAGE = 
 		"UPDATE preference " +
 		"SET p_value = ? " +
-		"WHERE p_key = message ";
+		"WHERE p_key = ? ";
 	
 	// Updates the user's password.
 	private static final String SQL_UPDATE_PASSWORD = 
@@ -2411,7 +2411,7 @@ public class UserQueries extends Query implements IUserQueries {
 			
 			// Update the password.
 			try {
-				getJdbcTemplate().update(SQL_UPDATE_MESSAGE, message);
+				getJdbcTemplate().update(SQL_UPDATE_MESSAGE, message, 'message');
 			}
 			catch(org.springframework.dao.DataAccessException e) {
 				transactionManager.rollback(status);
