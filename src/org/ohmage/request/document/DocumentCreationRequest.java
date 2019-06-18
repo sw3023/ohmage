@@ -248,7 +248,7 @@ public class DocumentCreationRequest extends UserRequest {
 		}
 		
 		try {
-			boolean isAdmin;
+			boolean isAdmin = false;
 			if(!isJavaFun) {
 				try {
 					LOGGER.info("Checking if the user is an admin.");
