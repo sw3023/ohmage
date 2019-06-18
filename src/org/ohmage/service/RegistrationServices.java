@@ -59,7 +59,7 @@ public class RegistrationServices {
 		}
 		
 		try {
-			return new RegistrationConfig(recaptchaPublicKey, termsOfService);
+			return new RegistrationConfig(recaptchaPublicKey, termsOfService, message);
 		}
 		catch(DomainException e) {
 			throw new ServiceException(e);
