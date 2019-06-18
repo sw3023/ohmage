@@ -91,6 +91,7 @@ public final class PreferenceCache extends KeyValueCache {
 	// Self-registration information.
 	public static final String KEY_SELF_REGISTRATION_ALLOWED = "self_registration_allowed";
 	public static final String KEY_TERMS_OF_SERVICE = "terms_of_service";
+	public static final String KEY_MESSAGE = "message";
 	
 	// Whether or not user/setup should be enabled
 	public static final String KEY_USER_SETUP_ENABLED = "user_setup_enabled";

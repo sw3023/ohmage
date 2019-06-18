@@ -24,8 +24,11 @@ public class RegistrationConfig {
 	 */
 	public static final String JSON_KEY_TERMS_OF_SERVICE = "terms_of_service";
 	
+	public static final String JSON_KEY_MESSAGE = "message";
+	
 	private final String recaptchaPublicKey;
 	private final String termsOfService;
+	private final String message;
 	
 	/**
 	 * Creates a new registration configuration.
@@ -38,7 +41,8 @@ public class RegistrationConfig {
 	 */
 	public RegistrationConfig(
 			final String recaptchaPublicKey, 
-			final String termsOfService) 
+			final String termsOfService,
+			final String message) 
 			throws DomainException {
 		
 		if(recaptchaPublicKey == null) {
@@ -47,9 +51,13 @@ public class RegistrationConfig {
 		else if(termsOfService == null) {
 			throw new DomainException("The terms of service is null.");
 		}
+		else if(message == null) {
+			throw new DomainException("The message is null.");
+		}
 		
 		this.recaptchaPublicKey = recaptchaPublicKey;
 		this.termsOfService = termsOfService;
+		this.message = message;
 	}
 	
 	/**
@@ -59,6 +67,10 @@ public class RegistrationConfig {
 	 */
 	public final String getRecaptchaPublicKey() {
 		return recaptchaPublicKey;
+	}
+	
+	public final String getMessage() {
+		return message;
 	}
 	
 	/**
@@ -73,6 +85,7 @@ public class RegistrationConfig {
 		
 		result.put(JSON_KEY_RECAPTCHA_KEY_PUBLIC, recaptchaPublicKey);
 		result.put(JSON_KEY_TERMS_OF_SERVICE, termsOfService);
+		result.put(JSON_KEY_MESSAGE, message);
 		
 		return result;
 	}

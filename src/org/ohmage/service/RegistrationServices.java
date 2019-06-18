@@ -48,6 +48,16 @@ public class RegistrationServices {
 			throw new ServiceException("The terms of service is missing from the database.", e);
 		}
 		
+		String message;
+		try {
+			message =
+					PreferenceCache.instance().lookup(
+							PreferenceCache.KEY_MESSAGE);
+		}
+		catch(CacheMissException e) {
+			throw new ServiceException("The message is missing from the database.", e);
+		}
+		
 		try {
 			return new RegistrationConfig(recaptchaPublicKey, termsOfService);
 		}
