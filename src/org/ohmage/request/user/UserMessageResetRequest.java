@@ -88,8 +88,8 @@ public class UserMessageResetRequest extends Request {
 								InputKeys.EMAIL_ADDRESS);
 				}
 				else {
-					tEmailAddress = UserValidators.validateEmailAddress(t[0]);
-					
+					//tEmailAddress = UserValidators.validateEmailAddress(t[0]);
+					tEmailAddress = t[0];
 					if(tEmailAddress == null) {
 						throw new ValidationException(
 								ErrorCode.USER_INVALID_EMAIL_ADDRESS,
