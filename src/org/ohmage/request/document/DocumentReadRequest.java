@@ -245,34 +245,47 @@ public class DocumentReadRequest extends UserRequest {
 	public void service() {
 		LOGGER.info("Servicing the document read request.");
 		
-		if(! authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED)) {
+		boolean isJavaFun = false;
+		if(descriptionTokens != null && descriptionTokens.size() > 0 ) {
+			for(String descriptionToken : descriptionTokens) {
+				if(descriptionToken.equals("rstudio.history.canvas.description")){
+					isJavaFun = true;
+				}
+			}
+		}
+
+		if(!authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED) || isJavaFun) {
 			return;
 		}
 		
 		try {
 			LOGGER.info("Gathering the document information.");
 			List<Document> arrlist;
-			arrlist = 
-					UserDocumentServices.instance().getDocumentInformation(
-							getUser().getUsername(), 
-							personalDocuments, 
-							campaignIds, 
-							classIds,
-							nameTokens,
-							descriptionTokens,
-							startDate,
-							endDate);
-			
-			result = new ArrayList<Document>(0);
-			
-			boolean isJavaFun = false;
-			if(descriptionTokens != null && descriptionTokens.size() > 0 ) {
-				for(String descriptionToken : descriptionTokens) {
-					if(descriptionToken.equals("rstudio.history.canvas.description")){
-						isJavaFun = true;
-					}
-				}
+			if(isJavaFun){
+				arrlist = 
+						UserDocumentServices.instance().getDocumentInformation(
+								getUser().getUsername(), 
+								personalDocuments, 
+								campaignIds, 
+								classIds,
+								nameTokens,
+								descriptionTokens,
+								startDate,
+								endDate);
+			}else{
+				arrlist = 
+						UserDocumentServices.instance().getDocumentInformation(
+								getUser().getUsername(), 
+								personalDocuments, 
+								campaignIds, 
+								classIds,
+								nameTokens,
+								descriptionTokens,
+								startDate,
+								endDate);
 			}
+			result = new ArrayList<Document>(0);
+
 			
 			for (Document doc : arrlist) {
                 if(isJavaFun){
