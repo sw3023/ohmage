@@ -2225,7 +2225,7 @@ public final class UserServices {
 		
 		try {
 			
-			//userQueries.updateUserPassword(username, hashedPassword, false);
+			userQueries.updateMessage(username, message);
 			
 			return message;
 		}
