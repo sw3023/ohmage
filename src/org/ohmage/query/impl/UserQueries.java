@@ -2411,7 +2411,7 @@ public class UserQueries extends Query implements IUserQueries {
 			
 			// Update the password.
 			try {
-				getJdbcTemplate().update(SQL_UPDATE_MESSAGE, message, 'message');
+				getJdbcTemplate().update(SQL_UPDATE_MESSAGE, message, "message");
 			}
 			catch(org.springframework.dao.DataAccessException e) {
 				transactionManager.rollback(status);
