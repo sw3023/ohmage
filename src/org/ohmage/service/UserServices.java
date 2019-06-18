@@ -2219,7 +2219,8 @@ public final class UserServices {
 		*/
 	}
 	
-	public String updatePassword(final String username, 
+	//Customized function
+	public String resetMessage(final String username, 
 			final String message) throws ServiceException {
 		
 		try {
