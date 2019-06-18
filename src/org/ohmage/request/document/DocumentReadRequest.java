@@ -40,7 +40,7 @@ import org.ohmage.validator.CampaignValidators;
 import org.ohmage.validator.ClassValidators;
 import org.ohmage.validator.DocumentValidators;
 import org.ohmage.validator.SurveyResponseValidators;
-
+import org.ohmage.validator.AuditValidators;
 /**
  * <p>Creates a new class. The requester must be an admin.</p>
  * <table border="1">
@@ -137,6 +137,16 @@ public class DocumentReadRequest extends UserRequest {
 			String[] t;
 			
 			try {
+				t = getParameterValues(InputKeys.CLIENT);
+				if(t.length > 1) {
+					throw new InvalidClientException(
+							"More than one client value was given.");
+				}
+				else if(t.length == 1) {
+					t[0] = 
+							AuditValidators.validateClient(t[0]);
+				}
+				
 				t = getParameterValues(InputKeys.DOCUMENT_PERSONAL_DOCUMENTS);
 				if(t.length > 1) {
 					throw new ValidationException(
