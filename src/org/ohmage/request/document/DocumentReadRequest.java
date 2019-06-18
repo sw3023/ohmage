@@ -263,6 +263,12 @@ public class DocumentReadRequest extends UserRequest {
 							startDate,
 							endDate);
 			result = arrlist;
+			
+			for (Document doc : arrlist) { 		      
+			    System.out.println(num);
+                arrlist.add(doc);				
+			}
+			
 			LOGGER.info("Found " + result.size() + " documents.");
 		}
 		catch(ServiceException e) {
