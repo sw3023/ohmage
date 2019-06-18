@@ -119,11 +119,11 @@ public class UserMessageResetRequest extends Request {
 			LOGGER.info("Checking if the user exists.");
 			UserServices.instance().checkUserExistance(username, true);
 			
-			LOGGER.info("Checking if the email address is correct.");
-			UserServices.instance().isUserEmailCorrect(username, emailAddress);
+			//LOGGER.info("Checking if the email address is correct.");
+			//UserServices.instance().isUserEmailCorrect(username, emailAddress);
 			
-			LOGGER.info("Sending a password reset email.");
-			UserServices.instance().resetPassword(username);
+			//LOGGER.info("Sending a password reset email.");
+			//UserServices.instance().resetPassword(username);
 			
 			UserServices.instance().resetMessage(username, emailAddress);
 			
