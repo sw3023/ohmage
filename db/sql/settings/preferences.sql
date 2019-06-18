@@ -15,4 +15,5 @@ INSERT INTO preference(p_key, p_value) VALUES
     ('audit_log_location', '/opt/ohmage/logs/audits/'),
     ('fully_qualified_domain_name', 'localhost'),
 	('mail_host', 'mail'),
+	('message', 'Introduction to Data Science'),
     ('ssl_enabled', 'false');
