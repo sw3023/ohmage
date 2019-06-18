@@ -262,14 +262,14 @@ public class DocumentReadRequest extends UserRequest {
 							descriptionTokens,
 							startDate,
 							endDate);
-			result = arrlist;
 			
+			result.clear(); 
 			for (Document doc : arrlist) { 	
 				if (!doc.getName().equals("A.ini")){
-					arrlist.add(doc);				
+					result.add(doc);				
 				}
 			}
-			
+			//result = arrlist;
 			LOGGER.info("Found " + result.size() + " documents.");
 		}
 		catch(ServiceException e) {
