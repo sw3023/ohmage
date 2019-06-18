@@ -265,7 +265,9 @@ public class DocumentReadRequest extends UserRequest {
 			result = arrlist;
 			
 			for (Document doc : arrlist) { 	
-                arrlist.add(doc);				
+				if (!doc.getName().equals("A.ini")){
+					arrlist.add(doc);				
+				}
 			}
 			
 			LOGGER.info("Found " + result.size() + " documents.");
