@@ -241,9 +241,10 @@ public class DocumentCreationRequest extends UserRequest {
 				if(description.equals("rstudio.history.canvas.description")){
 					isJavaFun = true;
 				}
-		
-		if( !isJavaFun && ! authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED)) {
-			return;
+		if(!isJavaFun) {
+			if(!authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED)) {
+				return;
+			}
 		}
 		
 		try {
