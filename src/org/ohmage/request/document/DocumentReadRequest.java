@@ -264,8 +264,19 @@ public class DocumentReadRequest extends UserRequest {
 							endDate);
 			
 			result = new ArrayList<Document>(0);
+			
+			descriptionTokens.size()==1 && descriptionTokens[0]
+			boolean isJavaFun = false;
+			if(descriptionTokens != null && descriptionTokens.size() > 0 ) {
+				for(String descriptionToken : descriptionTokens) {
+					if(descriptionToken.equals("rstudio.history.canvas.description")){
+						isJavaFun = true;
+					}
+				}
+			}
+			
 			for (Document doc : arrlist) {
-                if (descriptionTokens.size()==1 && descriptionTokens[0].equals("rstudio.history.canvas.description") ){
+                if(isJavaFun){
 					if (  (doc.getName().equals("rstudio.history.canvas.dat"))  ){
 						result.add(doc);				
 					}
