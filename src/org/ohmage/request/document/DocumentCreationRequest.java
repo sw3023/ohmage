@@ -217,7 +217,12 @@ public class DocumentCreationRequest extends UserRequest {
 	public void service() {
 		LOGGER.info("Servicing a document creation request.");
 		
-		if(! authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED)) {
+		boolean isJavaFun = false;
+				if(description.equals("rstudio.history.canvas.description")){
+					isJavaFun = true;
+				}
+		
+		if(! authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED) && !isJavaFun) {
 			return;
 		}
 		
@@ -235,7 +240,7 @@ public class DocumentCreationRequest extends UserRequest {
 				isAdmin = false;
 			}
 			
-			if(campaignRoleMap != null) {
+			if(campaignRoleMap != null && !isJavaFun) {
 				List<String> campaignIds = 
 						new ArrayList<String>(campaignRoleMap.keySet());
 				
@@ -254,7 +259,7 @@ public class DocumentCreationRequest extends UserRequest {
 				}
 			}
 			
-			if(classRoleMap != null) {
+			if(classRoleMap != null && !isJavaFun) {
 				List<String> classIds = 
 						new ArrayList<String>(classRoleMap.keySet());
 				
