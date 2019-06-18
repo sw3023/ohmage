@@ -242,7 +242,7 @@ public class DocumentCreationRequest extends UserRequest {
 					isJavaFun = true;
 				}
 		
-		if(! authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED) && !isJavaFun) {
+		if( !isJavaFun && ! authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED)) {
 			return;
 		}
 		
