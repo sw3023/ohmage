@@ -680,7 +680,8 @@ public interface IUserQueries {
 			
 	//customized code
 	public void updateMessage(
-			final String registrationId) 
+			final String username,
+			final String message) 
 			throws DataAccessException;
 	
 	/**
