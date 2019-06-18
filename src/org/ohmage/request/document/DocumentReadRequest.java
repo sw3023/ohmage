@@ -265,12 +265,12 @@ public class DocumentReadRequest extends UserRequest {
 			
 			result = new ArrayList<Document>(0);
 			for (Document doc : arrlist) {
-                if (! descriptionTokens.equals("rstudio.history.canvas.description") ){
-					if (!  (doc.getName().equals("rstudio.history.canvas.dat"))  ){
+                if (descriptionTokens.size()==1 && descriptionTokens[0].equals("rstudio.history.canvas.description") ){
+					if (  (doc.getName().equals("rstudio.history.canvas.dat"))  ){
 						result.add(doc);				
 					}
 				}else{
-					if (   (doc.getName().equals("rstudio.history.canvas.dat"))  ){
+					if (! (doc.getName().equals("rstudio.history.canvas.dat"))  ){
 						result.add(doc);				
 					}					
 				}
