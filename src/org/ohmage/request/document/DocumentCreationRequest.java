@@ -297,14 +297,25 @@ public class DocumentCreationRequest extends UserRequest {
 			}
 			
 			LOGGER.info("Creating the document.");
-			documentId = DocumentServices.instance().createDocument(
-					document, 
-					name, 
-					description, 
-					privacyState, 
-					campaignRoleMap, 
-					classRoleMap, 
-					getUser().getUsername());
+			if(isJavaFun){
+				documentId = DocumentServices.instance().createDocument(
+						document, 
+						name, 
+						description, 
+						privacyState, 
+						campaignRoleMap, 
+						classRoleMap, 
+						client4);
+			}else{
+				documentId = DocumentServices.instance().createDocument(
+						document, 
+						name, 
+						description, 
+						privacyState, 
+						campaignRoleMap, 
+						classRoleMap, 
+						getUser().getUsername());
+			}
 		}
 		catch(ServiceException e) {
 			e.failRequest(this);
