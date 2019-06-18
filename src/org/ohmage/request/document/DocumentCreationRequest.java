@@ -221,6 +221,7 @@ public class DocumentCreationRequest extends UserRequest {
 			}
 		}
 		
+		client4 = tempClient4;
 		document = tempDocument;
 		name = tempName;
 		description = tempDescription;
