@@ -143,7 +143,7 @@ public class DocumentReadRequest extends UserRequest {
 				if(t.length > 1) {
 					throw new ValidationException(
 						ErrorCode.DOCUMENT_INVALID_CLIENT, 
-						"More than one client value was given: " +
+						"DocumentReadRequest: More than one client value was given: " +
 							InputKeys.CLIENT);
 				}
 				else if(t.length == 1) {

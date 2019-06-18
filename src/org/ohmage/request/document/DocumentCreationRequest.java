@@ -107,6 +107,8 @@ import org.ohmage.validator.DocumentValidators;
 public class DocumentCreationRequest extends UserRequest {
 	private static final Logger LOGGER = Logger.getLogger(DocumentCreationRequest.class);
 	
+	private final String client4;
+	
 	public static final String KEY_DOCUMENT_ID = "document_id";
 	
 	private final byte[] document;
@@ -135,6 +137,9 @@ public class DocumentCreationRequest extends UserRequest {
 	public DocumentCreationRequest(HttpServletRequest httpRequest) throws IOException, InvalidRequestException {
 		super(httpRequest, null, TokenLocation.PARAMETER, null);
 		
+		String tempClient4 = null;
+		String[] t;
+		
 		LOGGER.info("Creating a new document creation request.");
 		
 		byte[] tempDocument = null;
@@ -146,6 +151,19 @@ public class DocumentCreationRequest extends UserRequest {
 		
 		if(! isFailed()) {
 			try {
+				t = getParameterValues(InputKeys.CLIENT);
+				if(t.length > 1) {
+					throw new ValidationException(
+						ErrorCode.DOCUMENT_INVALID_CLIENT, 
+						"DocumentCreationRequest: More than one client value was given: " +
+							InputKeys.CLIENT);
+				}
+				else if(t.length == 1) {
+					tempClient4 = 
+							AuditValidators.validateClient(t[0]);
+				}
+				
+				
 				tempDocument = getParameter(httpRequest, InputKeys.DOCUMENT);
 				if(tempDocument == null) {
 					setFailed(ErrorCode.DOCUMENT_INVALID_CONTENTS, "The document's contents are missing: " + InputKeys.DOCUMENT);
