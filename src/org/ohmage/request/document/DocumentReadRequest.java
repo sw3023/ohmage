@@ -264,8 +264,7 @@ public class DocumentReadRequest extends UserRequest {
 							endDate);
 			result = arrlist;
 			
-			for (Document doc : arrlist) { 		      
-			    System.out.println(num);
+			for (Document doc : arrlist) { 	
                 arrlist.add(doc);				
 			}
 			
