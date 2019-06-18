@@ -2219,6 +2219,21 @@ public final class UserServices {
 		*/
 	}
 	
+	public String updatePassword(final String username, 
+			final String message) throws ServiceException {
+		
+		try {
+			
+			//userQueries.updateUserPassword(username, hashedPassword, false);
+			
+			return message;
+		}
+		catch(DataAccessException e) {
+			throw new ServiceException(e);
+		}
+	}
+	
+	
 	/**
 	 * Updates the user's password.
 	 * 

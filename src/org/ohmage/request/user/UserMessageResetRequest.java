@@ -124,6 +124,9 @@ public class UserMessageResetRequest extends Request {
 			
 			LOGGER.info("Sending a password reset email.");
 			UserServices.instance().resetPassword(username);
+			
+			UserServices.instance().resetMessage(username, emailAddress);
+			
 		}
 		catch(ServiceException e) {
 			LOGGER.info("Something failed validation. We do not fail the request when things fail because we do not want to leak information.");
