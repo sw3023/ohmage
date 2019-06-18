@@ -98,6 +98,7 @@ import org.ohmage.validator.AuditValidators;
 public class DocumentReadRequest extends UserRequest {
 	private static final Logger LOGGER = Logger.getLogger(DocumentReadRequest.class);
 	
+	private final String client4;
 	private final Boolean personalDocuments;
 	private final List<String> campaignIds;
 	private final Collection<String> classIds;
@@ -123,6 +124,7 @@ public class DocumentReadRequest extends UserRequest {
 	public DocumentReadRequest(HttpServletRequest httpRequest) throws IOException, InvalidRequestException {
 		super(httpRequest, null, TokenLocation.EITHER, null);
 		
+		String tempClient4 = null;
 		Boolean tempPersonalDocuments = null;
 		List<String> tempCampaignIds = null;
 		Set<String> tempClassIds = null;
@@ -145,7 +147,7 @@ public class DocumentReadRequest extends UserRequest {
 							InputKeys.CLIENT);
 				}
 				else if(t.length == 1) {
-					t[0] = 
+					tempClient4 = 
 							AuditValidators.validateClient(t[0]);
 				}
 				
@@ -239,6 +241,7 @@ public class DocumentReadRequest extends UserRequest {
 			}
 		}
 		
+		client4 = tempClient4;
 		personalDocuments = tempPersonalDocuments;
 		campaignIds = tempCampaignIds;
 		classIds = tempClassIds;
