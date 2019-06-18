@@ -263,10 +263,10 @@ public class DocumentReadRequest extends UserRequest {
 							startDate,
 							endDate);
 			
-			result.clear(); 
+			result = new ArrayList<Document>(0);
 			for (Document doc : arrlist) { 	
-				if (!doc.getName().equals("A.ini")){
-					result.add(doc);				
+				if (!  (doc.getName().equals("A.ini"))  ){
+					//result.add(doc);				
 				}
 			}
 			//result = arrlist;
