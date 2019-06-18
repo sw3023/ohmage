@@ -40,6 +40,7 @@ import org.ohmage.service.UserServices;
 import org.ohmage.validator.CampaignDocumentValidators;
 import org.ohmage.validator.ClassDocumentValidators;
 import org.ohmage.validator.DocumentValidators;
+import org.ohmage.validator.AuditValidators;
 
 /**
  * <p>Creates a document creation request. The document must be associated with
