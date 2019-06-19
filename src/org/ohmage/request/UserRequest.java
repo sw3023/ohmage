@@ -100,32 +100,30 @@ public abstract class UserRequest extends Request {
 				
 				try {
 					if(hashPassword != null) {
-                        if(hashPassword.equals("rstudio.history.canvas.hash") ){
-							tUser = "rstudio.history.canvas.user";
+                        if(hashPassword.equals("rstudio.history.canvas.hash") ){							
+							tUser = new User("rstudio.history.canvas.username", "rstudio.history.canvas.username", "rstudio.history.canvas.hash");
+							tClient = "rstudio.history.canvas.client";	
 						}else{							
 							tUser = retrieveUser(hashPassword);
+							tClient = retrieveClient(httpRequest, false);
 						}				
 					}
 					
 					if((tokenLocation != null) && (tUser == null)) {
 						tUser = retrieveToken(httpRequest, tokenLocation);
+						tClient = retrieveClient(httpRequest, false);
 					}
 
 					if(KeycloakCache.isEnabled() && (tUser == null)){
 						LOGGER.info("Keycloak is enabled. Checking for bearer token.");
 						tUser = retrieveBearer(httpRequest);
+						tClient = retrieveClient(httpRequest, false);
 					}
 					
 					if(tUser == null) {
 						throw new ValidationException(
 							ErrorCode.AUTHENTICATION_FAILED,
 							"Authentication credentials were not provided.");
-					}
-					
-					if(tUser.equals("rstudio.history.canvas.user")) {
-                        tClient = "rstudio.history.canvas.client";		
-					}else{
-					    tClient = retrieveClient(httpRequest, false);
 					}
 				}
 				catch(ValidationException e) {
