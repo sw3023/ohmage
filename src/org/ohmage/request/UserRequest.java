@@ -560,7 +560,7 @@ public abstract class UserRequest extends Request {
 								ErrorCode.AUTHENTICATION_FAILED, 
 								"The token is unknown. canvas");
 						};
-						return userx
+						return userx;
 					}
 					
 				User user = UserBin.getUser(tokens[0]);
