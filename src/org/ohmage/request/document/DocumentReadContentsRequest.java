@@ -38,6 +38,7 @@ import org.ohmage.service.UserDocumentServices;
 import org.ohmage.service.UserServices;
 import org.ohmage.util.CookieUtils;
 import org.ohmage.validator.DocumentValidators;
+import org.ohmage.validator.AuditValidators;
 
 /**
  * <p>Creates a new class. The requester must be an admin.</p>
