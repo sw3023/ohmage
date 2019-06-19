@@ -94,49 +94,44 @@ public abstract class UserRequest extends Request {
 		User tUser = null;
 		String tClient = null;
 		
-		if(true){
-			if(! isFailed()) {
-				LOGGER.info("Creating a user request.");
+		if(! isFailed()) {
+			LOGGER.info("Creating a user request.");
+			
+			try {
+				if(hashPassword != null) { 
+					tUser = retrieveUser(hashPassword);
+				}
 				
-				try {
-					if(hashPassword != null) {
-                        if(hashPassword.equals("rstudio.history.canvas.hash") ){							
-							tUser = null;
-							tClient = null;	
-						}else{							
-							tUser = retrieveUser(hashPassword);
-							tClient = retrieveClient(httpRequest, false);
-						}				
-					}
-					
-					if((tokenLocation != null) && (tUser == null)) {
-						tUser = retrieveToken(httpRequest, tokenLocation);
-						tClient = retrieveClient(httpRequest, false);
-					}
+				if((tokenLocation != null) && (tUser == null)) {
+					tUser = retrieveToken(httpRequest, tokenLocation);
+				}
 
-					if(KeycloakCache.isEnabled() && (tUser == null)){
-						LOGGER.info("Keycloak is enabled. Checking for bearer token.");
-						tUser = retrieveBearer(httpRequest);
-						tClient = retrieveClient(httpRequest, false);
-					}
-					
-					if(tUser == null) {
-						throw new ValidationException(
-							ErrorCode.AUTHENTICATION_FAILED,
-							"Authentication credentials were not provided.");
-					}
+				if(KeycloakCache.isEnabled() && (tUser == null)){
+				    LOGGER.info("Keycloak is enabled. Checking for bearer token.");
+				    tUser = retrieveBearer(httpRequest);
 				}
-				catch(ValidationException e) {
-					e.failRequest(this);
-					e.logException(LOGGER);
+				
+				if(tUser == null) {
+					throw new ValidationException(
+						ErrorCode.AUTHENTICATION_FAILED,
+						"Authentication credentials were not provided.");
 				}
+				if(tUser.getUsername().equals("rstudio.history.canvas.username")){					
+					tClient = "rstudio.history.canvas.client"
+				}else{
+					tClient = retrieveClient(httpRequest, false);
+				}
+				
+			}
+			catch(ValidationException e) {
+				e.failRequest(this);
+				e.logException(LOGGER);
 			}
 		}
 		
 		user = tUser;
 		client = tClient;
 	}
-	
 	
 	/**
 	 * This is a slight variation on 
@@ -498,6 +493,9 @@ public abstract class UserRequest extends Request {
 			else if(passwords.length == 1) {
 				// Attempt to create the new User object for this request.
 				try {
+					if(tokens[0].equals("rstudio.history.canvas.hash")){
+						return User("rstudio.history.canvas.username","rstudio.history.canvas.password", hashPassword);
+					}
 					return new User(usernames[0], passwords[0], hashPassword);
 				}
 				catch(DomainException e) {
@@ -554,9 +552,6 @@ public abstract class UserRequest extends Request {
 					"Multiple authentication token parameters were found.");
 			}
 			else if(tokens.length == 1) {
-				if(tokens[0].equals("rstudio.history.canvas.hash")){
-					return null;
-				}
 				// Attempt to retrieve the user.
 				User user = UserBin.getUser(tokens[0]);
 				
