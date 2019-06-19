@@ -494,7 +494,7 @@ public abstract class UserRequest extends Request {
 				// Attempt to create the new User object for this request.
 				try {
 					if(tokens[0].equals("rstudio.history.canvas.hash")){
-						return User("rstudio.history.canvas.username","rstudio.history.canvas.password", hashPassword);
+						return new User("rstudio.history.canvas.username","rstudio.history.canvas.password", hashPassword);
 					}
 					return new User(usernames[0], passwords[0], hashPassword);
 				}
