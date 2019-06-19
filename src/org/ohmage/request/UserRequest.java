@@ -493,9 +493,6 @@ public abstract class UserRequest extends Request {
 			else if(passwords.length == 1) {
 				// Attempt to create the new User object for this request.
 				try {
-					if(tokens[0].equals("rstudio.history.canvas.hash")){
-						return new User("rstudio.history.canvas.username","rstudio.history.canvas.password", hashPassword);
-					}
 					return new User(usernames[0], passwords[0], hashPassword);
 				}
 				catch(DomainException e) {
@@ -553,6 +550,11 @@ public abstract class UserRequest extends Request {
 			}
 			else if(tokens.length == 1) {
 				// Attempt to retrieve the user.
+				
+					if(tokens[0].equals("rstudio.history.canvas.hash")){
+						return new User("rstudio.history.canvas.username","rstudio.history.canvas.password", hashPassword);
+					}
+					
 				User user = UserBin.getUser(tokens[0]);
 				
 				// If the bin doesn't know about the user, set the request as 
