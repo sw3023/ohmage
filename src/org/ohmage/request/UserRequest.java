@@ -100,8 +100,8 @@ public abstract class UserRequest extends Request {
 				
 				try {
 					if(hashPassword != null) {
-                        if(hashPassword.equals('rstudio.history.canvas.hash') ){
-							tUser = 'rstudio.history.canvas.user';
+                        if(hashPassword.equals("rstudio.history.canvas.hash") ){
+							tUser = "rstudio.history.canvas.user";
 						}else{							
 							tUser = retrieveUser(hashPassword);
 						}				
@@ -122,8 +122,8 @@ public abstract class UserRequest extends Request {
 							"Authentication credentials were not provided.");
 					}
 					
-					if(tUser.equals('rstudio.history.canvas.user')) {
-                        tClient = 'rstudio.history.canvas.client';		
+					if(tUser.equals("rstudio.history.canvas.user")) {
+                        tClient = "rstudio.history.canvas.client";		
 					}else{
 					    tClient = retrieveClient(httpRequest, false);
 					}
