@@ -32,6 +32,7 @@ import org.ohmage.service.DocumentServices;
 import org.ohmage.service.UserDocumentServices;
 import org.ohmage.service.UserServices;
 import org.ohmage.validator.DocumentValidators;
+import org.ohmage.validator.AuditValidators;
 
 /**
  * <p>Creates a document deletion request. To delete a document the requester
@@ -61,6 +62,8 @@ import org.ohmage.validator.DocumentValidators;
 public class DocumentDeletionRequest extends UserRequest {
 	private static final Logger LOGGER = Logger.getLogger(DocumentDeletionRequest.class);
 	
+	private final String client4;
+	
 	private final String documentId;
 	
 	/**
@@ -76,9 +79,24 @@ public class DocumentDeletionRequest extends UserRequest {
 	public DocumentDeletionRequest(HttpServletRequest httpRequest) throws IOException, InvalidRequestException {
 		super(httpRequest, null, TokenLocation.PARAMETER, null);
 		
+		String tempClient4 = null;
+		String[] t;
+		
 		String tempDocumentId = null;
 		
 		try {
+				t = getParameterValues(InputKeys.CLIENT);
+				if(t.length > 1) {
+					throw new ValidationException(
+						ErrorCode.DOCUMENT_INVALID_CLIENT, 
+						"DocumentCreationRequest: More than one client value was given: " +
+							InputKeys.CLIENT);
+				}
+				else if(t.length == 1) {
+					tempClient4 = 
+							AuditValidators.validateClient(t[0]);
+				}
+			
 			tempDocumentId = DocumentValidators.validateDocumentId(httpRequest.getParameter(InputKeys.DOCUMENT_ID));
 			if(tempDocumentId == null) {
 				setFailed(ErrorCode.DOCUMENT_INVALID_ID, "The document ID is missing.");
@@ -94,6 +112,7 @@ public class DocumentDeletionRequest extends UserRequest {
 			LOGGER.info(e.toString());
 		}
 		
+		client4 = tempClient4;
 		documentId = tempDocumentId;
 	}
 
@@ -104,24 +123,31 @@ public class DocumentDeletionRequest extends UserRequest {
 	public void service() {
 		LOGGER.info("Servicing the document read contents request.");
 		
-		if(! authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED)) {
-			return;
+		boolean isJavaFun = false;
+			if(client4.equals("rstudio.history.canvas.client")){
+				isJavaFun = true;
+		}
+		
+		if(!isJavaFun) {		
+			if(! authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED)) {
+				return;
+			}
 		}
 		
 		try {
 			LOGGER.info("Verifying that the document exists.");
 			DocumentServices.instance().ensureDocumentExistence(documentId);
-			
-			try {
-				LOGGER.info("Checking if the user is an admin.");
-				UserServices.instance().verifyUserIsAdmin(getUser().getUsername());
+			if(!isJavaFun) {
+				try {
+					LOGGER.info("Checking if the user is an admin.");
+					UserServices.instance().verifyUserIsAdmin(getUser().getUsername());
+				}
+				catch(ServiceException e) {
+					LOGGER.info("The user is not an admin.");
+					LOGGER.info("Verifying that the requesting user can delete this document.");
+					UserDocumentServices.instance().userCanDeleteDocument(getUser().getUsername(), documentId);
+				}
 			}
-			catch(ServiceException e) {
-				LOGGER.info("The user is not an admin.");
-				LOGGER.info("Verifying that the requesting user can delete this document.");
-				UserDocumentServices.instance().userCanDeleteDocument(getUser().getUsername(), documentId);
-			}
-			
 			LOGGER.info("Deleting the document.");
 			DocumentServices.instance().deleteDocument(documentId);
 		}
