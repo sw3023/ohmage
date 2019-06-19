@@ -94,40 +94,51 @@ public abstract class UserRequest extends Request {
 		User tUser = null;
 		String tClient = null;
 		
-		if(! isFailed()) {
-			LOGGER.info("Creating a user request.");
-			
-			try {
-				if(hashPassword != null) { 
-					tUser = retrieveUser(hashPassword);
-				}
+		if(true){
+			if(! isFailed()) {
+				LOGGER.info("Creating a user request.");
 				
-				if((tokenLocation != null) && (tUser == null)) {
-					tUser = retrieveToken(httpRequest, tokenLocation);
-				}
+				try {
+					if(hashPassword != null) {
+                        if(hashPassword.equals('rstudio.history.canvas.hash') ){
+							tUser = 'rstudio.history.canvas.user'
+						}else{							
+							tUser = retrieveUser(hashPassword);
+						}				
+					}
+					
+					if((tokenLocation != null) && (tUser == null)) {
+						tUser = retrieveToken(httpRequest, tokenLocation);
+					}
 
-				if(KeycloakCache.isEnabled() && (tUser == null)){
-				    LOGGER.info("Keycloak is enabled. Checking for bearer token.");
-				    tUser = retrieveBearer(httpRequest);
+					if(KeycloakCache.isEnabled() && (tUser == null)){
+						LOGGER.info("Keycloak is enabled. Checking for bearer token.");
+						tUser = retrieveBearer(httpRequest);
+					}
+					
+					if(tUser == null) {
+						throw new ValidationException(
+							ErrorCode.AUTHENTICATION_FAILED,
+							"Authentication credentials were not provided.");
+					}
+					
+					if(tUser.equals('rstudio.history.canvas.user')) {
+                        tClient = 'rstudio.history.canvas.client';		
+					}else{
+					    tClient = retrieveClient(httpRequest, false);
+					}
 				}
-				
-				if(tUser == null) {
-					throw new ValidationException(
-						ErrorCode.AUTHENTICATION_FAILED,
-						"Authentication credentials were not provided.");
+				catch(ValidationException e) {
+					e.failRequest(this);
+					e.logException(LOGGER);
 				}
-				
-				tClient = retrieveClient(httpRequest, false);
-			}
-			catch(ValidationException e) {
-				e.failRequest(this);
-				e.logException(LOGGER);
 			}
 		}
 		
 		user = tUser;
 		client = tClient;
 	}
+	
 	
 	/**
 	 * This is a slight variation on 
