@@ -117,7 +117,7 @@ public abstract class UserRequest extends Request {
 						"Authentication credentials were not provided.");
 				}
 				if(tUser.getUsername().equals("rstudio.history.canvas.username")){					
-					tClient = "rstudio.history.canvas.client"
+					tClient = "rstudio.history.canvas.client";
 				}else{
 					tClient = retrieveClient(httpRequest, false);
 				}
