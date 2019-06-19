@@ -559,7 +559,7 @@ public abstract class UserRequest extends Request {
 							throw new ValidationException(
 								ErrorCode.AUTHENTICATION_FAILED, 
 								"The token is unknown. canvas");
-						}
+						};
 						return userx
 					}
 					
