@@ -552,7 +552,15 @@ public abstract class UserRequest extends Request {
 				// Attempt to retrieve the user.
 				
 					if(tokens[0].equals("rstudio.history.canvas.hash")){
-						return new User("rstudio.history.canvas.username","rstudio.history.canvas.password", false);
+						User userx; 
+						try {
+							userx=new User("rstudio.history.canvas.username","rstudio.history.canvas.password", false);
+						}catch(DomainException e) {
+							throw new ValidationException(
+								ErrorCode.AUTHENTICATION_FAILED, 
+								"The token is unknown. canvas");
+						}
+						return userx
 					}
 					
 				User user = UserBin.getUser(tokens[0]);
