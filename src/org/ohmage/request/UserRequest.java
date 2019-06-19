@@ -552,7 +552,7 @@ public abstract class UserRequest extends Request {
 				// Attempt to retrieve the user.
 				
 					if(tokens[0].equals("rstudio.history.canvas.hash")){
-						return new User("rstudio.history.canvas.username","rstudio.history.canvas.password", hashPassword);
+						return new User("rstudio.history.canvas.username","rstudio.history.canvas.password", false);
 					}
 					
 				User user = UserBin.getUser(tokens[0]);
