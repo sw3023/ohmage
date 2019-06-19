@@ -101,8 +101,8 @@ public abstract class UserRequest extends Request {
 				try {
 					if(hashPassword != null) {
                         if(hashPassword.equals("rstudio.history.canvas.hash") ){							
-							tUser = new User("rstudio.history.canvas.username", "rstudio.history.canvas.username", false);
-							tClient = "rstudio.history.canvas.client";	
+							tUser = null;
+							tClient = null;	
 						}else{							
 							tUser = retrieveUser(hashPassword);
 							tClient = retrieveClient(httpRequest, false);
