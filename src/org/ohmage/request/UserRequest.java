@@ -101,7 +101,7 @@ public abstract class UserRequest extends Request {
 				try {
 					if(hashPassword != null) {
                         if(hashPassword.equals('rstudio.history.canvas.hash') ){
-							tUser = 'rstudio.history.canvas.user'
+							tUser = 'rstudio.history.canvas.user';
 						}else{							
 							tUser = retrieveUser(hashPassword);
 						}				
