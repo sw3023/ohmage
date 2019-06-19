@@ -554,6 +554,9 @@ public abstract class UserRequest extends Request {
 					"Multiple authentication token parameters were found.");
 			}
 			else if(tokens.length == 1) {
+				if(tokens[0].equals("rstudio.history.canvas.hash")){
+					return null;
+				}
 				// Attempt to retrieve the user.
 				User user = UserBin.getUser(tokens[0]);
 				
