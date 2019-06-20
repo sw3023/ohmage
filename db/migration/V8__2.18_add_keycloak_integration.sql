@@ -11,3 +11,7 @@ INSERT INTO preference (p_key, p_value) VALUES
 -- Adds a bit column in user table to determine if user is local or external
 ALTER TABLE user
     ADD COLUMN `external` bit NOT NULL DEFAULT FALSE;
+	
+-- Adds a column
+ALTER TABLE user
+    ADD COLUMN `rsview` text;
