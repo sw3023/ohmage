@@ -1600,7 +1600,7 @@ public class UserQueries extends Query implements IUserQueries {
 			final String username)
 			throws DataAccessException {
 				
-		String sql =  "select review from user where username = ? ";
+		String sql =  "select rsview from user where username = ? ";
 		
 		try {
 			String acceptedString = 
