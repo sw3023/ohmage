@@ -164,14 +164,14 @@ CREATE TABLE IF NOT EXISTS user (
   campaign_creation_privilege bit NOT NULL,
   class_creation_privilege bit NOT NULL DEFAULT FALSE,
   user_setup_privilege bit NOT NULL DEFAULT FALSE,
-  email_address varchar(320),
   rsview varchar(320),
   admin bit NOT NULL,
   creation_timestamp datetime DEFAULT null,
   last_modified_timestamp timestamp DEFAULT now() ON UPDATE now(),
   initial_password text,
   PRIMARY KEY (id),
-  UNIQUE (username)
+  UNIQUE (username),
+  email_address varchar(320)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- ALTER TABLE ohmage.user ADD COLUMN rsview varchar(320) AFTER email_address;
 
