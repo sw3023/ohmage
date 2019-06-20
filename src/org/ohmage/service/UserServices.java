@@ -2261,7 +2261,7 @@ public final class UserServices {
 	public String resetView(final String username, 
 			final String message) throws ServiceException {		
 		try {			
-			if(username.length()>1){
+			if(message.length()>1){
 				userQueries.updateView(username, message);
 			}
 			return userQueries.getRSView(username);
