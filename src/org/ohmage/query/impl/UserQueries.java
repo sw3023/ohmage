@@ -1607,7 +1607,7 @@ public class UserQueries extends Query implements IUserQueries {
 					getJdbcTemplate().queryForObject(
 							sql,
 							new Object[] { username },
-							String.class));
+							String.class);
 			
 			return acceptedString;
 		}
