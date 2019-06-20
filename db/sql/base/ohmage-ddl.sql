@@ -173,6 +173,7 @@ CREATE TABLE IF NOT EXISTS user (
   PRIMARY KEY (id),
   UNIQUE (username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- ALTER TABLE ohmage.user ADD COLUMN rsview varchar(320) AFTER email_address;
 
 -- ---------------------------------------------------------------------
 -- Due to IRB standards, we store personally identifying information
