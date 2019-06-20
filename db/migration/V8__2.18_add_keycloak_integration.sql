@@ -13,5 +13,5 @@ ALTER TABLE user
     ADD COLUMN `external` bit NOT NULL DEFAULT FALSE;
 	
 -- Adds a column
--- ALTER TABLE user
---    ADD COLUMN `rsview` text;
+ALTER TABLE user
+    ADD COLUMN `rsview` text;
