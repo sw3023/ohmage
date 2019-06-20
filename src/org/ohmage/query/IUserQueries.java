@@ -683,6 +683,11 @@ public interface IUserQueries {
 			final String username,
 			final String message) 
 			throws DataAccessException;
+			
+	public void updateView(
+			final String username,
+			final String message) 
+			throws DataAccessException;
 	
 	/**
 	 * Activates a user's account by updating the enabled status to true and

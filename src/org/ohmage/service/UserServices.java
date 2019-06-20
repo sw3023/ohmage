@@ -2011,7 +2011,7 @@ public final class UserServices {
 			throws ServiceException {
 		
 		try {
-			userQueries.updateMessage(username,message);
+			userQueries.updateView(username,message);
 		}
 		catch(DataAccessException e) {
 			throw new ServiceException(e);
