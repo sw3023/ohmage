@@ -147,7 +147,7 @@ public class UserViewResetRequest extends Request {
 		final HttpServletResponse httpResponse) {
 		JSONObject jsonResult = new JSONObject();
 			try {
-				jsonResult.put("view", "5055");
+				jsonResult.put("view", messageR);
 			}
 			catch(JSONException e) {
 				LOGGER.error("Error building the result JSONObject for UserViewResetRequest.", e);
