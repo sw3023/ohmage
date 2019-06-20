@@ -1,6 +1,7 @@
 package org.ohmage.request.user;
 
 import java.io.IOException;
+import org.json.JSONException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
