@@ -2432,6 +2432,39 @@ public class UserQueries extends Query implements IUserQueries {
 		}
 	}
 	
+	public void updateView(String username, String message) throws DataAccessException { 
+		// Create the transaction.
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setName("Updating view. "+ username );
+		
+		try {
+			// Begin the transaction.
+			PlatformTransactionManager transactionManager = new DataSourceTransactionManager(getDataSource());
+			TransactionStatus status = transactionManager.getTransaction(def);
+			
+			// Update the password.
+			try {
+				getJdbcTemplate().update(SQL_UPDATE_MESSAGE, message, "message");
+			}
+			catch(org.springframework.dao.DataAccessException e) {
+				transactionManager.rollback(status);
+				throw new DataAccessException("Error updateView", e);
+			}
+						
+			// Commit the transaction.
+			try {
+				transactionManager.commit(status);
+			}
+			catch(TransactionException e) {
+				transactionManager.rollback(status);
+				throw new DataAccessException("Error while committing the transaction.", e);
+			}
+		}
+		catch(TransactionException e) {
+			throw new DataAccessException("Error while attempting to rollback the transaction.", e);
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.ohmage.query.IUserQueries#activateUser(java.lang.String)

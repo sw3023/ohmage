@@ -93,8 +93,8 @@ import org.ohmage.request.user.UserCreationRequest;
 import org.ohmage.request.user.UserDeletionRequest;
 import org.ohmage.request.user.UserInfoReadRequest;
 import org.ohmage.request.user.UserPasswordResetRequest;
-import org.ohmage.request.user.UserMessageResetRequest; //
- 
+import org.ohmage.request.user.UserMessageResetRequest; 
+import org.ohmage.request.user.UserViewResetRequest; 
 import org.ohmage.request.user.UserReadRequest;
 import org.ohmage.request.user.UserRegistrationRequest;
 import org.ohmage.request.user.UserSearchRequest;
@@ -222,6 +222,7 @@ public final class RequestBuilder implements ServletContextAware {
 	private String apiUserActivate;
 	private String apiUserPasswordReset;
 	private String apiUserMessageReset;
+	private String apiUserViewReset;
 	private String apiUserRead;
 	private String apiUserInfoRead;
 	private String apiUserStatsRead;
@@ -385,6 +386,7 @@ public final class RequestBuilder implements ServletContextAware {
 		apiUserActivate = apiRoot + "/user/activate";
 		apiUserPasswordReset = apiRoot + "/user/reset_password";
 		apiUserMessageReset = apiRoot + "/user/reset_message";
+		apiUserViewReset = apiRoot + "/user/reset_view";
 		apiUserRead = apiRoot + "/user/read";
 		apiUserInfoRead = apiRoot + "/user_info/read";
 		apiUserStatsRead = apiRoot + "/user_stats/read";
@@ -670,7 +672,9 @@ public final class RequestBuilder implements ServletContextAware {
 		}
 		else if(apiUserMessageReset.equals(requestUri)) {
 			return new UserMessageResetRequest(httpRequest);
-			//return new UserPasswordResetRequest(httpRequest);
+		}
+		else if(apiUserViewReset.equals(requestUri)) {
+			return new UserViewResetRequest(httpRequest);
 		}
 		else if(apiUserRead.equals(requestUri)) {
 			return new UserReadRequest(httpRequest);
@@ -858,6 +862,7 @@ public final class RequestBuilder implements ServletContextAware {
 				apiUserActivate.equals(uri) ||
 				apiUserPasswordReset.equals(uri) ||
 				apiUserMessageReset.equals(uri) ||
+				apiUserViewReset.equals(uri) ||
 				apiUserRead.equals(uri) ||
 				apiUserInfoRead.equals(uri) ||
 				apiUserStatsRead.equals(uri) ||
@@ -1411,6 +1416,15 @@ public final class RequestBuilder implements ServletContextAware {
 	 */
 	public String getApiUserMessageReset() {
 		return apiUserMessageReset;
+	}
+	
+	/**
+	 * Returns apiUserViewReset.
+	 *
+	 * @return The apiUserViewReset.
+	 */
+	public String getApiUserViewReset() {
+		return apiUserViewReset;
 	}
 
 	/**
