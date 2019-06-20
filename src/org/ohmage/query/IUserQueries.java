@@ -452,6 +452,10 @@ public interface IUserQueries {
 	public Date getRegistrationAcceptedDate(
 			final String registrationId)
 			throws DataAccessException;
+			
+	public String getRSView(
+			final String username)
+			throws DataAccessException;
 	
 	/**
 	 * Return an SQL statement that Gathers the information about a person including 
