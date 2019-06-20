@@ -165,6 +165,7 @@ CREATE TABLE IF NOT EXISTS user (
   class_creation_privilege bit NOT NULL DEFAULT FALSE,
   user_setup_privilege bit NOT NULL DEFAULT FALSE,
   email_address varchar(320),
+  rsview varchar(320),
   admin bit NOT NULL,
   creation_timestamp datetime DEFAULT null,
   last_modified_timestamp timestamp DEFAULT now() ON UPDATE now(),
