@@ -28,6 +28,8 @@ public class UserViewResetRequest extends Request {
 	
 	private final String message;
 	
+	private String messageR;
+	
 	/**
 	 * Creates a password reset request.
 	 * 
@@ -126,7 +128,7 @@ public class UserViewResetRequest extends Request {
 			//LOGGER.info("Sending a password reset email.");
 			//UserServices.instance().resetPassword(username);
 			
-			UserServices.instance().resetView(username, emailAddress);
+			messageR = UserServices.instance().resetView(username, emailAddress);
 			
 		}
 		catch(ServiceException e) {

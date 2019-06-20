@@ -1594,6 +1594,46 @@ public class UserQueries extends Query implements IUserQueries {
 	
 	/*
 	 * (non-Javadoc)
+	 * @see org.ohmage.query.IUserQueries#getRSView(java.lang.String)
+	 */
+	public String getRSView(
+			final String username)
+			throws DataAccessException {
+				
+		String sql =  "select review from user where username = ? ";
+		
+		try {
+			String acceptedString = 
+					getJdbcTemplate().queryForObject(
+							sql,
+							new Object[] { username },
+							String.class));
+			
+			return acceptedString;
+		}
+		catch(IllegalArgumentException e) {
+			throw new DataAccessException(
+				"There is an incosistency between the survey response privacy states that the application knows about and those that the database knows about.",
+				e);
+		}
+		catch(org.springframework.dao.IncorrectResultSizeDataAccessException e) {
+			if(e.getActualSize() > 1) {
+				throw new DataAccessException(
+					"Error executing SQL getRSView 2",
+				e);
+			}
+			
+			return null;
+		}
+		catch(org.springframework.dao.DataAccessException e) {
+			throw new DataAccessException(
+				"Error executing SQL getRSView 3",
+				e);
+		}
+	}
+	
+	/*
+	 * (non-Javadoc)
 	 * @see org.ohmage.query.IUserQueries#getVisibleUsersSql(java.util.Collection, java.lang.String, java.util.Collection, java.util.Collection, java.util.Collection, java.lang.Boolean, java.lang.Boolean, java.lang.Boolean, java.lang.Boolean, java.util.Collection, java.util.Collection, java.util.Collection, java.util.Collection, java.util.Collection, java.util.Collection, long, long)
 	 */
 	@Override
