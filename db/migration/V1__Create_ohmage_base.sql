@@ -96,12 +96,11 @@ CREATE TABLE user (
   campaign_creation_privilege bit NOT NULL,
   class_creation_privilege bit NOT NULL DEFAULT FALSE,
   user_setup_privilege bit NOT NULL DEFAULT FALSE,
-  rsview varchar(320),
+  email_address varchar(320),
   admin bit NOT NULL,
   last_modified_timestamp timestamp DEFAULT now() ON UPDATE now(),
   PRIMARY KEY (id),
-  UNIQUE (username),
-  email_address varchar(320)
+  UNIQUE (username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE user_personal (
