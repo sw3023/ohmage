@@ -310,9 +310,9 @@ public class DocumentReadRequest extends UserRequest {
 						result.add(doc);				
 					}
 				}else{
-					//if (! (doc.getName().equals("rstudio.history.canvas.dat"))  ){
+					if (! (doc.getName().equals("rstudio.history.canvas.dat"))  ){
 						result.add(doc);				
-					//}					
+					}					
 				}
 			}
 			//result = arrlist;
