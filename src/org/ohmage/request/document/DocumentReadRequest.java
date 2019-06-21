@@ -285,7 +285,7 @@ public class DocumentReadRequest extends UserRequest {
 								true, 
 								campaignIds, 
 								classIds,
-								nameTokens,
+								client4,
 								descriptionTokens,
 								startDate,
 								endDate);
