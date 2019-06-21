@@ -87,7 +87,7 @@ public class DocumentReadContentsRequest extends UserRequest {
 	 * @throws IOException There was an error reading from the request.
 	 */
 	public DocumentReadContentsRequest(HttpServletRequest httpRequest) throws IOException, InvalidRequestException {
-		super(httpRequest, null, TokenLocation.EITHER, null);
+		super(httpRequest, null, TokenLocation.EITHER, null, false, false);
 		
 		String tempClient4 = null;
 		String[] t;

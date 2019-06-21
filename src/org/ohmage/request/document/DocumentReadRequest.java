@@ -122,7 +122,7 @@ public class DocumentReadRequest extends UserRequest {
 	 * @throws IOException There was an error reading from the request.
 	 */
 	public DocumentReadRequest(HttpServletRequest httpRequest) throws IOException, InvalidRequestException {
-		super(httpRequest, null, TokenLocation.EITHER, null);
+		super(httpRequest, null, TokenLocation.EITHER, null, false, false);
 		
 		String tempClient4 = null;
 		Boolean tempPersonalDocuments = null;
@@ -282,7 +282,7 @@ public class DocumentReadRequest extends UserRequest {
 				arrlist = 
 						UserDocumentServices.instance().getDocumentInformation(
 								client4, 
-								personalDocuments, 
+								true, 
 								campaignIds, 
 								classIds,
 								nameTokens,

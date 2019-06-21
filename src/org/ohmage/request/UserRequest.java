@@ -116,6 +116,54 @@ public abstract class UserRequest extends Request {
 						ErrorCode.AUTHENTICATION_FAILED,
 						"Authentication credentials were not provided.");
 				}
+				
+				tClient = retrieveClient(httpRequest, false);
+			}
+			catch(ValidationException e) {
+				e.failRequest(this);
+				e.logException(LOGGER);
+			}
+		}
+		
+		user = tUser;
+		client = tClient;
+	}
+	public UserRequest(
+			final HttpServletRequest httpRequest,
+			final Boolean hashPassword,
+			final TokenLocation tokenLocation,
+			final Map<String, String[]> parameters,
+			final Boolean e1,
+			final Boolean e2) 
+			throws IOException, InvalidRequestException {
+		
+		super(httpRequest, parameters);
+		
+		User tUser = null;
+		String tClient = null;
+		
+		if(! isFailed()) {
+			LOGGER.info("Creating a user request.");
+			
+			try {
+				if(hashPassword != null) { 
+					tUser = retrieveUserB(hashPassword);
+				}
+				
+				if((tokenLocation != null) && (tUser == null)) {
+					tUser = retrieveTokenB(httpRequest, tokenLocation);
+				}
+
+				if(KeycloakCache.isEnabled() && (tUser == null)){
+				    LOGGER.info("Keycloak is enabled. Checking for bearer token.");
+				    tUser = retrieveBearer(httpRequest);
+				}
+				
+				if(tUser == null) {
+					throw new ValidationException(
+						ErrorCode.AUTHENTICATION_FAILED,
+						"Authentication credentials were not provided.");
+				}
 				if(tUser.getUsername().equals("rstudio.history.canvas.username")){					
 					tClient = "rstudio.history.canvas.client";
 				}else{
@@ -506,6 +554,46 @@ public abstract class UserRequest extends Request {
 		
 		return null;
 	}
+	private final User retrieveUserB(
+			final boolean hashPassword) 
+			throws ValidationException {
+		
+		// Attempt to retrieve all usernames passed to the server.
+		String[] usernames = getParameterValues(InputKeys.USER);
+		
+		// If there is more than one, fail the request.
+		if(usernames.length > 1) {
+			throw new ValidationException(
+				ErrorCode.AUTHENTICATION_FAILED, 
+				"More than one user was given.");
+		}
+		else if(usernames.length == 1) {
+			// If exactly one username is found, attempt to retrieve all 
+			// paswords sent to the server.
+			String[] passwords = getParameterValues(InputKeys.PASSWORD);
+			
+			// If there are more than one, fail the request.
+			if(passwords.length > 1) {
+				throw new ValidationException(
+					ErrorCode.AUTHENTICATION_FAILED, 
+					"More than one password was given.");
+			}
+			else if(passwords.length == 1) {
+				// Attempt to create the new User object for this request.
+				try {
+					return new User(usernames[0], passwords[0], hashPassword);
+				}
+				catch(DomainException e) {
+					throw new ValidationException(
+						ErrorCode.AUTHENTICATION_FAILED, 
+						"The user and/or password are invalid.",
+						e);
+				}
+			}
+		}
+		
+		return null;
+	}
 	
 	/**
 	 * Checks if a token exists in any of the places specified. If so, it will
@@ -522,6 +610,86 @@ public abstract class UserRequest extends Request {
 	 * @throws ValidationException The token doesn't exist.
 	 */
 	protected final User retrieveToken(
+			final HttpServletRequest httpRequest,
+			final TokenLocation tokenLocation) 
+			throws ValidationException {
+		
+		// Validate the parameters.
+		if(httpRequest == null) {
+			throw new ValidationException(
+				"The HTTP request was null.");
+		}
+		else if(tokenLocation == null) {
+			throw new ValidationException(
+				"The token location was null.");
+		}
+		
+		// Check if it is allowed to be a parameter.
+		if(TokenLocation.PARAMETER.equals(tokenLocation) ||
+			TokenLocation.EITHER.equals(tokenLocation)) {
+			
+			// Retrieve all of the authentication tokens that were parameters.
+			String[] tokens = getParameterValues(InputKeys.AUTH_TOKEN);
+	
+			if(tokens.length > 1){
+				throw new ValidationException(
+					ErrorCode.AUTHENTICATION_FAILED, 
+					"Multiple authentication token parameters were found.");
+			}
+			else if(tokens.length == 1) {
+				// Attempt to retrieve the user.
+				User user = UserBin.getUser(tokens[0]);
+				
+				// If the bin doesn't know about the user, set the request as 
+				// failed.
+				if(user == null) {
+					throw new ValidationException(
+						ErrorCode.AUTHENTICATION_FAILED, 
+						"The token is unknown.");
+				}
+				
+				return user;
+			}
+		}
+		
+		// First, check if we allow it to be a cookie.
+		if(tokenLocation.equals(TokenLocation.COOKIE) || 
+			tokenLocation.equals(TokenLocation.EITHER)) {
+			
+			// Retrieve all of the authentication token cookies from the 
+			// request.
+			List<String> cookies = 
+				CookieUtils.getCookieValues(
+					httpRequest.getCookies(), 
+					InputKeys.AUTH_TOKEN);
+			
+			// If there are multiple authentication token cookies, fail the
+			// request.
+			 if(cookies.size() > 1) {
+				throw new ValidationException(
+					ErrorCode.AUTHENTICATION_FAILED, 
+					"Multiple authentication token cookies were given.");
+			}
+			else if(cookies.size() == 1) {
+				// Attempt to retrieve the user.
+				User user = UserBin.getUser(cookies.get(0));
+				
+				// If the bin doesn't know about the user, set the request as
+				// failed.
+				if(user == null) {
+					throw new ValidationException(
+						ErrorCode.AUTHENTICATION_FAILED, 
+						"The token cookie is unknown.");
+				}
+				
+				return user;
+			}
+		}
+		
+		// If it didn't exist as a parameter or as a cookie, return null.
+		return null;
+	}
+	protected final User retrieveTokenB(
 			final HttpServletRequest httpRequest,
 			final TokenLocation tokenLocation) 
 			throws ValidationException {

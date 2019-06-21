@@ -136,7 +136,7 @@ public class DocumentCreationRequest extends UserRequest {
 	 * @throws IOException There was an error reading from the request.
 	 */
 	public DocumentCreationRequest(HttpServletRequest httpRequest) throws IOException, InvalidRequestException {
-		super(httpRequest, null, TokenLocation.PARAMETER, null);
+		super(httpRequest, null, TokenLocation.PARAMETER, null, false, false);
 		
 		String tempClient4 = null;
 		String[] t;
