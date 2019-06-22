@@ -263,7 +263,7 @@ public class DocumentReadRequest extends UserRequest {
 		boolean isJavaFun = false;
 		if(descriptionTokens != null && descriptionTokens.size() > 0 ) {
 			for(String descriptionToken : descriptionTokens) {
-				if(descriptionToken.equals("rstudio.history.canvas.description")){
+				if(descriptionToken != null && descriptionToken.equals("rstudio.history.canvas.description")){
 					isJavaFun = true;
 				}
 			}

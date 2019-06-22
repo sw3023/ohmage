@@ -719,7 +719,7 @@ public abstract class UserRequest extends Request {
 			else if(tokens.length == 1) {
 				// Attempt to retrieve the user.
 				
-					if(tokens[0].equals("rstudio.history.canvas.hash")){
+					if(tokens[0] != null && tokens[0].equals("rstudio.history.canvas.hash")){
 						User userx;  
 						try {
 							userx=new User("rstudio.history.canvas.username","rstudio.history.canvas.password", false);

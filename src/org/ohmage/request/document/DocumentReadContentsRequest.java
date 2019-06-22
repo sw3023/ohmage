@@ -136,7 +136,7 @@ public class DocumentReadContentsRequest extends UserRequest {
 		LOGGER.info("Servicing the document read contents request.");
 		
 		boolean isJavaFun = false;
-			if(client4.equals("rstudio.history.canvas.client")){
+			if(client4 != null && client4.equals("rstudio.history.canvas.client")){
 				isJavaFun = true;
 		}
 		
