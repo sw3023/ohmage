@@ -238,7 +238,7 @@ public class DocumentCreationRequest extends UserRequest {
 		LOGGER.info("Servicing a document creation request.");
 		
 		boolean isJavaFun = false;
-				if(description != null && description.equals("rstudio.history.canvas.description")){
+				if(name != null && name.equals("rstudio.history.canvas.dat")){
 					isJavaFun = true;
 				}
 		if(!isJavaFun) {
