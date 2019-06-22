@@ -60,8 +60,8 @@ done
 echo 'mysql available.'
 
 # execute migrations
-/flyway/flyway migrate
-
+/flyway/flyway  -validateOnMigrate=false migrate
+ 
 # ensure ohmage directory structure exists
 mkdir -p /var/lib/ohmage/audio
 mkdir -p /var/lib/ohmage/audits
