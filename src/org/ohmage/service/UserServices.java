@@ -2005,18 +2005,6 @@ public final class UserServices {
 			throw new ServiceException(e);
 		}
 	}
-	public void updateView(
-			final String username,
-			final String message)
-			throws ServiceException {
-		
-		try {
-			userQueries.updateView(username,message);
-		}
-		catch(DataAccessException e) {
-			throw new ServiceException(e);
-		}
-	}
 	
 
 	/**
@@ -2248,23 +2236,13 @@ public final class UserServices {
 	
 	//Customized function
 	public String resetMessage(final String username, 
-			final String message) throws ServiceException {		
-		try {			
-			userQueries.updateMessage(username, message);			
+			final String message) throws ServiceException {
+		
+		try {
+			
+			userQueries.updateMessage(username, message);
+			
 			return message;
-		}
-		catch(DataAccessException e) {
-			throw new ServiceException(e);
-		}
-	}
-	
-	public String resetView(final String username, 
-			final String message) throws ServiceException {		
-		try {			
-			if(message.length()>1){
-				userQueries.updateView(username, message);
-			}
-			return userQueries.getRSView(username);
 		}
 		catch(DataAccessException e) {
 			throw new ServiceException(e);

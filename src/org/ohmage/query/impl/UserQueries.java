@@ -267,10 +267,6 @@ public class UserQueries extends Query implements IUserQueries {
 		"UPDATE preference " +
 		"SET p_value = ? " +
 		"WHERE p_key = ? ";
-	private static final String SQL_UPDATE_VIEW = 
-		"UPDATE user " +
-		"SET rsview = ? " +
-		"WHERE username = ? ";
 	
 	// Updates the user's password.
 	private static final String SQL_UPDATE_PASSWORD = 
@@ -1594,46 +1590,6 @@ public class UserQueries extends Query implements IUserQueries {
 	
 	/*
 	 * (non-Javadoc)
-	 * @see org.ohmage.query.IUserQueries#getRSView(java.lang.String)
-	 */
-	public String getRSView(
-			final String username)
-			throws DataAccessException {
-				
-		String sql =  "select rsview from user where username = ? ";
-		
-		try {
-			String acceptedString = 
-					getJdbcTemplate().queryForObject(
-							sql,
-							new Object[] { username },
-							String.class);
-			
-			return acceptedString;
-		}
-		catch(IllegalArgumentException e) {
-			throw new DataAccessException(
-				"There is an incosistency between the survey response privacy states that the application knows about and those that the database knows about.",
-				e);
-		}
-		catch(org.springframework.dao.IncorrectResultSizeDataAccessException e) {
-			if(e.getActualSize() > 1) {
-				throw new DataAccessException(
-					"Error executing SQL getRSView 2",
-				e);
-			}
-			
-			return null;
-		}
-		catch(org.springframework.dao.DataAccessException e) {
-			throw new DataAccessException(
-				"Error executing SQL getRSView 3",
-				e);
-		}
-	}
-	
-	/*
-	 * (non-Javadoc)
 	 * @see org.ohmage.query.IUserQueries#getVisibleUsersSql(java.util.Collection, java.lang.String, java.util.Collection, java.util.Collection, java.util.Collection, java.lang.Boolean, java.lang.Boolean, java.lang.Boolean, java.lang.Boolean, java.util.Collection, java.util.Collection, java.util.Collection, java.util.Collection, java.util.Collection, java.util.Collection, long, long)
 	 */
 	@Override
@@ -2460,39 +2416,6 @@ public class UserQueries extends Query implements IUserQueries {
 			catch(org.springframework.dao.DataAccessException e) {
 				transactionManager.rollback(status);
 				throw new DataAccessException("Error updateMessage", e);
-			}
-						
-			// Commit the transaction.
-			try {
-				transactionManager.commit(status);
-			}
-			catch(TransactionException e) {
-				transactionManager.rollback(status);
-				throw new DataAccessException("Error while committing the transaction.", e);
-			}
-		}
-		catch(TransactionException e) {
-			throw new DataAccessException("Error while attempting to rollback the transaction.", e);
-		}
-	}
-	
-	public void updateView(String username, String message) throws DataAccessException { 
-		// Create the transaction.
-		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		def.setName("Updating view. "+ username );
-		
-		try {
-			// Begin the transaction.
-			PlatformTransactionManager transactionManager = new DataSourceTransactionManager(getDataSource());
-			TransactionStatus status = transactionManager.getTransaction(def);
-			
-			// Update the password.
-			try {
-				getJdbcTemplate().update(SQL_UPDATE_VIEW, message, username);
-			}
-			catch(org.springframework.dao.DataAccessException e) {
-				transactionManager.rollback(status);
-				throw new DataAccessException("Error updateView", e);
 			}
 						
 			// Commit the transaction.

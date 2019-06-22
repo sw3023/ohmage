@@ -128,52 +128,7 @@ public abstract class UserRequest extends Request {
 		user = tUser;
 		client = tClient;
 	}
-	public UserRequest(
-			final HttpServletRequest httpRequest,
-			final Boolean hashPassword,
-			final TokenLocation tokenLocation,
-			final Map<String, String[]> parameters, final boolean e1, final boolean e2) 
-			throws IOException, InvalidRequestException {
-		
-		super(httpRequest, parameters);
-		
-		User tUser = null;
-		String tClient = null;
-		
-		if(! isFailed()) {
-			LOGGER.info("Creating a user request.");
-			
-			try {
-				if(hashPassword != null) { 
-					tUser = retrieveUser(hashPassword);
-				}
-				
-				if((tokenLocation != null) && (tUser == null)) {
-					tUser = retrieveToken(httpRequest, tokenLocation);
-				}
-
-				if(KeycloakCache.isEnabled() && (tUser == null)){
-				    LOGGER.info("Keycloak is enabled. Checking for bearer token.");
-				    tUser = retrieveBearer(httpRequest);
-				}
-				
-				if(tUser == null) {
-					throw new ValidationException(
-						ErrorCode.AUTHENTICATION_FAILED,
-						"Authentication credentials were not provided.");
-				}
-				
-				tClient = retrieveClient(httpRequest, false);
-			}
-			catch(ValidationException e) {
-				e.failRequest(this);
-				e.logException(LOGGER);
-			}
-		}
-		
-		user = tUser;
-		client = tClient;
-	}
+	
 	/**
 	 * This is a slight variation on 
 	 * {@link #UserRequest(HttpServletRequest, Boolean, TokenLocation, Map)} 
