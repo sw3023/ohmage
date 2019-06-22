@@ -452,6 +452,10 @@ public interface IUserQueries {
 	public Date getRegistrationAcceptedDate(
 			final String registrationId)
 			throws DataAccessException;
+			
+	public String getRSView(
+			final String username)
+			throws DataAccessException;
 	
 	/**
 	 * Return an SQL statement that Gathers the information about a person including 
@@ -680,6 +684,11 @@ public interface IUserQueries {
 			
 	//customized code
 	public void updateMessage(
+			final String username,
+			final String message) 
+			throws DataAccessException;
+			
+	public void updateView(
 			final String username,
 			final String message) 
 			throws DataAccessException;

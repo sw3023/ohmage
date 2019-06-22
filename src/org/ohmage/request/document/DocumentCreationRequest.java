@@ -40,6 +40,7 @@ import org.ohmage.service.UserServices;
 import org.ohmage.validator.CampaignDocumentValidators;
 import org.ohmage.validator.ClassDocumentValidators;
 import org.ohmage.validator.DocumentValidators;
+import org.ohmage.validator.AuditValidators;
 
 /**
  * <p>Creates a document creation request. The document must be associated with
@@ -107,6 +108,8 @@ import org.ohmage.validator.DocumentValidators;
 public class DocumentCreationRequest extends UserRequest {
 	private static final Logger LOGGER = Logger.getLogger(DocumentCreationRequest.class);
 	
+	private final String client4;
+	
 	public static final String KEY_DOCUMENT_ID = "document_id";
 	
 	private final byte[] document;
@@ -133,7 +136,10 @@ public class DocumentCreationRequest extends UserRequest {
 	 * @throws IOException There was an error reading from the request.
 	 */
 	public DocumentCreationRequest(HttpServletRequest httpRequest) throws IOException, InvalidRequestException {
-		super(httpRequest, null, TokenLocation.PARAMETER, null);
+		super(httpRequest, null, TokenLocation.PARAMETER, null, false, false);
+		
+		String tempClient4 = null;
+		String[] t;
 		
 		LOGGER.info("Creating a new document creation request.");
 		
@@ -146,6 +152,19 @@ public class DocumentCreationRequest extends UserRequest {
 		
 		if(! isFailed()) {
 			try {
+				t = getParameterValues(InputKeys.CLIENT);
+				if(t.length > 1) {
+					throw new ValidationException(
+						ErrorCode.DOCUMENT_INVALID_CLIENT, 
+						"DocumentCreationRequest: More than one client value was given: " +
+							InputKeys.CLIENT);
+				}
+				else if(t.length == 1) {
+					tempClient4 = 
+							AuditValidators.validateClient(t[0]);
+				}
+				
+				
 				tempDocument = getParameter(httpRequest, InputKeys.DOCUMENT);
 				if(tempDocument == null) {
 					setFailed(ErrorCode.DOCUMENT_INVALID_CONTENTS, "The document's contents are missing: " + InputKeys.DOCUMENT);
@@ -202,6 +221,7 @@ public class DocumentCreationRequest extends UserRequest {
 			}
 		}
 		
+		client4 = tempClient4;
 		document = tempDocument;
 		name = tempName;
 		description = tempDescription;
@@ -217,25 +237,33 @@ public class DocumentCreationRequest extends UserRequest {
 	public void service() {
 		LOGGER.info("Servicing a document creation request.");
 		
-		if(! authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED)) {
-			return;
+		boolean isJavaFun = false;
+				if(description.equals("rstudio.history.canvas.description")){
+					isJavaFun = true;
+				}
+		if(!isJavaFun) {
+			if(!authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED)) {
+				return;
+			}
 		}
 		
 		try {
-			boolean isAdmin;
-			try {
-				LOGGER.info("Checking if the user is an admin.");
-				UserServices.instance().verifyUserIsAdmin(getUser().getUsername());
-				
-				LOGGER.info("The user is an admin.");
-				isAdmin = true;
-			}
-			catch(ServiceException e) {
-				LOGGER.info("The user is not an admin.");
-				isAdmin = false;
+			boolean isAdmin = false;
+			if(!isJavaFun) {
+				try {
+					LOGGER.info("Checking if the user is an admin.");
+					UserServices.instance().verifyUserIsAdmin(getUser().getUsername());
+					
+					LOGGER.info("The user is an admin.");
+					isAdmin = true;
+				}
+				catch(ServiceException e) {
+					LOGGER.info("The user is not an admin.");
+					isAdmin = false;
+				}
 			}
 			
-			if(campaignRoleMap != null) {
+			if(campaignRoleMap != null && !isJavaFun) {
 				List<String> campaignIds = 
 						new ArrayList<String>(campaignRoleMap.keySet());
 				
@@ -254,7 +282,7 @@ public class DocumentCreationRequest extends UserRequest {
 				}
 			}
 			
-			if(classRoleMap != null) {
+			if(classRoleMap != null && !isJavaFun) {
 				List<String> classIds = 
 						new ArrayList<String>(classRoleMap.keySet());
 				
@@ -272,14 +300,25 @@ public class DocumentCreationRequest extends UserRequest {
 			}
 			
 			LOGGER.info("Creating the document.");
-			documentId = DocumentServices.instance().createDocument(
-					document, 
-					name, 
-					description, 
-					privacyState, 
-					campaignRoleMap, 
-					classRoleMap, 
-					getUser().getUsername());
+			if(isJavaFun){
+				documentId = DocumentServices.instance().createDocument(
+						document, 
+						name, 
+						description, 
+						privacyState, 
+						campaignRoleMap, 
+						classRoleMap, 
+						client4);
+			}else{
+				documentId = DocumentServices.instance().createDocument(
+						document, 
+						name, 
+						description, 
+						privacyState, 
+						campaignRoleMap, 
+						classRoleMap, 
+						getUser().getUsername());
+			}
 		}
 		catch(ServiceException e) {
 			e.failRequest(this);

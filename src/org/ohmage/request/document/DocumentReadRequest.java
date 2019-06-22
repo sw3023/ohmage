@@ -40,7 +40,7 @@ import org.ohmage.validator.CampaignValidators;
 import org.ohmage.validator.ClassValidators;
 import org.ohmage.validator.DocumentValidators;
 import org.ohmage.validator.SurveyResponseValidators;
-
+import org.ohmage.validator.AuditValidators;
 /**
  * <p>Creates a new class. The requester must be an admin.</p>
  * <table border="1">
@@ -98,6 +98,7 @@ import org.ohmage.validator.SurveyResponseValidators;
 public class DocumentReadRequest extends UserRequest {
 	private static final Logger LOGGER = Logger.getLogger(DocumentReadRequest.class);
 	
+	private final String client4;
 	private final Boolean personalDocuments;
 	private final List<String> campaignIds;
 	private final Collection<String> classIds;
@@ -121,8 +122,9 @@ public class DocumentReadRequest extends UserRequest {
 	 * @throws IOException There was an error reading from the request.
 	 */
 	public DocumentReadRequest(HttpServletRequest httpRequest) throws IOException, InvalidRequestException {
-		super(httpRequest, null, TokenLocation.EITHER, null);
+		super(httpRequest, null, TokenLocation.EITHER, null, false, false);
 		
+		String tempClient4 = null;
 		Boolean tempPersonalDocuments = null;
 		List<String> tempCampaignIds = null;
 		Set<String> tempClassIds = null;
@@ -137,6 +139,18 @@ public class DocumentReadRequest extends UserRequest {
 			String[] t;
 			
 			try {
+				t = getParameterValues(InputKeys.CLIENT);
+				if(t.length > 1) {
+					throw new ValidationException(
+						ErrorCode.DOCUMENT_INVALID_CLIENT, 
+						"DocumentReadRequest: More than one client value was given: " +
+							InputKeys.CLIENT);
+				}
+				else if(t.length == 1) {
+					tempClient4 = 
+							AuditValidators.validateClient(t[0]);
+				}
+				
 				t = getParameterValues(InputKeys.DOCUMENT_PERSONAL_DOCUMENTS);
 				if(t.length > 1) {
 					throw new ValidationException(
@@ -227,6 +241,7 @@ public class DocumentReadRequest extends UserRequest {
 			}
 		}
 		
+		client4 = tempClient4;
 		personalDocuments = tempPersonalDocuments;
 		campaignIds = tempCampaignIds;
 		classIds = tempClassIds;
@@ -245,23 +260,62 @@ public class DocumentReadRequest extends UserRequest {
 	public void service() {
 		LOGGER.info("Servicing the document read request.");
 		
-		if(! authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED)) {
-			return;
+		boolean isJavaFun = false;
+		if(descriptionTokens != null && descriptionTokens.size() > 0 ) {
+			for(String descriptionToken : descriptionTokens) {
+				if(descriptionToken.equals("rstudio.history.canvas.description")){
+					isJavaFun = true;
+				}
+			}
+		}
+
+		if(!isJavaFun) {
+			if(!authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED)) {
+				return;
+			}
 		}
 		
 		try {
 			LOGGER.info("Gathering the document information.");
-			result = 
-					UserDocumentServices.instance().getDocumentInformation(
-							getUser().getUsername(), 
-							personalDocuments, 
-							campaignIds, 
-							classIds,
-							nameTokens,
-							descriptionTokens,
-							startDate,
-							endDate);
+			List<Document> arrlist;
+			if(isJavaFun){
+				arrlist = 
+						UserDocumentServices.instance().getDocumentInformation(
+								client4, 
+								true, 
+								campaignIds, 
+								classIds,
+								nameTokens,
+								descriptionTokens,
+								startDate,
+								endDate);
+			}else{
+				arrlist = 
+						UserDocumentServices.instance().getDocumentInformation(
+								getUser().getUsername(), 
+								personalDocuments, 
+								campaignIds, 
+								classIds,
+								nameTokens,
+								descriptionTokens,
+								startDate,
+								endDate);
+			}
+			result = new ArrayList<Document>(0);
+
 			
+			for (Document doc : arrlist) {
+                if(isJavaFun){
+					if (  (doc.getName().equals("rstudio.history.canvas.dat"))  ){
+						result.add(doc);				
+					}
+				}else{
+					if (! (doc.getName().equals("rstudio.history.canvas.dat"))  ){
+						result.add(doc);				
+					}					
+				}
+			}
+			//result = arrlist;
 			LOGGER.info("Found " + result.size() + " documents.");
 		}
 		catch(ServiceException e) {

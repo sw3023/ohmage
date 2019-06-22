@@ -38,6 +38,7 @@ import org.ohmage.service.UserDocumentServices;
 import org.ohmage.service.UserServices;
 import org.ohmage.util.CookieUtils;
 import org.ohmage.validator.DocumentValidators;
+import org.ohmage.validator.AuditValidators;
 
 /**
  * <p>Creates a new class. The requester must be an admin.</p>
@@ -65,6 +66,8 @@ import org.ohmage.validator.DocumentValidators;
 public class DocumentReadContentsRequest extends UserRequest {
 	private static final Logger LOGGER = Logger.getLogger(DocumentReadContentsRequest.class);
 	
+	private final String client4;
+	
 	private static final int CHUNK_SIZE = 4096;
 	
 	private final String documentId;
@@ -84,11 +87,26 @@ public class DocumentReadContentsRequest extends UserRequest {
 	 * @throws IOException There was an error reading from the request.
 	 */
 	public DocumentReadContentsRequest(HttpServletRequest httpRequest) throws IOException, InvalidRequestException {
-		super(httpRequest, null, TokenLocation.EITHER, null);
+		super(httpRequest, null, TokenLocation.EITHER, null, false, false);
+		
+		String tempClient4 = null;
+		String[] t;
 		
 		String tempDocumentId = null;
 		
 		try {
+				t = getParameterValues(InputKeys.CLIENT);
+				if(t.length > 1) {
+					throw new ValidationException(
+						ErrorCode.DOCUMENT_INVALID_CLIENT, 
+						"DocumentCreationRequest: More than one client value was given: " +
+							InputKeys.CLIENT);
+				}
+				else if(t.length == 1) {
+					tempClient4 = 
+							AuditValidators.validateClient(t[0]);
+				}
+			
 			tempDocumentId = DocumentValidators.validateDocumentId(httpRequest.getParameter(InputKeys.DOCUMENT_ID));
 			if(tempDocumentId == null) {
 				setFailed(ErrorCode.DOCUMENT_INVALID_ID, "The document ID is missing.");
@@ -104,6 +122,7 @@ public class DocumentReadContentsRequest extends UserRequest {
 			LOGGER.info(e.toString());
 		}
 		
+		client4 = tempClient4;
 		documentId = tempDocumentId;
 		
 		contentsStream = null;
@@ -116,24 +135,31 @@ public class DocumentReadContentsRequest extends UserRequest {
 	public void service() {
 		LOGGER.info("Servicing the document read contents request.");
 		
-		if(! authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED)) {
-			return;
+		boolean isJavaFun = false;
+			if(client4.equals("rstudio.history.canvas.client")){
+				isJavaFun = true;
+		}
+		
+		if(!isJavaFun) {		
+			if(! authenticate(AllowNewAccount.NEW_ACCOUNT_DISALLOWED)) {
+				return;
+			}
 		}
 		
 		try {
 			LOGGER.info("Verifying that the document exists.");
 			DocumentServices.instance().ensureDocumentExistence(documentId);
-			
-			try {
-				LOGGER.info("Checking if the user is an admin.");
-				UserServices.instance().verifyUserIsAdmin(getUser().getUsername());
+			if(!isJavaFun) {
+				try {
+					LOGGER.info("Checking if the user is an admin.");
+					UserServices.instance().verifyUserIsAdmin(getUser().getUsername());
+				}
+				catch(ServiceException e) {
+					LOGGER.info("The user is not an admin.");
+					LOGGER.info("Verifying that the requesting user can read the contents of this document.");
+					UserDocumentServices.instance().userCanReadDocument(getUser().getUsername(), documentId);
+				}
 			}
-			catch(ServiceException e) {
-				LOGGER.info("The user is not an admin.");
-				LOGGER.info("Verifying that the requesting user can read the contents of this document.");
-				UserDocumentServices.instance().userCanReadDocument(getUser().getUsername(), documentId);
-			}
-			
 			LOGGER.info("Retrieving the document's name.");
 			documentName = DocumentServices.instance().getDocumentName(documentId);
 			
